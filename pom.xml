@@ -30,11 +30,7 @@
             <artifactId>jbs-commons</artifactId>
             <version>1.3.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.javabeanstack</groupId>
-            <artifactId>jbs-business</artifactId>
-            <version>1.3.0-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -46,6 +42,47 @@
             <artifactId>hamcrest-core</artifactId>
             <version>1.3</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-ejb-client-bom</artifactId>
+            <version>14.0.0.Final</version>
+            <scope>test</scope>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.3.6.Final</version>
+            <scope>test</scope>
+        </dependency>
+         <dependency>
+            <groupId>org.javabeanstack</groupId>
+            <artifactId>jbs-business</artifactId>
+            <version>1.3.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>       
+        <dependency>
+            <groupId>org.javabeanstack</groupId>
+            <artifactId>jbs-interfaces</artifactId>
+            <version>1.3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javabeanstack</groupId>
+            <artifactId>jbs-core</artifactId>
+            <version>1.3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.javabeanstack</groupId>
+            <artifactId>jbs-security</artifactId>
+            <version>1.3.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.javabeanstack</groupId>
+            <artifactId>jbs-parent</artifactId>
+            <version>1.3.0-SNAPSHOT</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 </project>
