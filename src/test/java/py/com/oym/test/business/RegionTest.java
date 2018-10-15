@@ -35,14 +35,14 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setIdregion(Long.parseLong("119"));
         region.setCodigo("PYG");
         region.setNombre("Paraguay");
         region.setFechamodificacion(new Date());
-        region.setIdempresa(Long.parseLong("3"));
-        IDataResult dataResult = dataLinkCat.persist(region);        
+        IDataResult dataResult = dataLink.persist(region);        
         Region regionResultado = dataResult.getRowUpdated();
-        assertEquals(region.getIdregion(), regionResultado.getIdregion());  
+        String nombre = "Paraguay";
+        assertEquals(nombre,regionResultado.getNombre());
+        dataLink.remove(region);
     } 
     @Test
     public void testPersistListRegion() throws Exception{
@@ -57,16 +57,14 @@ public class RegionTest extends TestClass{
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
-            region.setIdregion(Long.parseLong("119"));
             region.setCodigo(codigo_aux);
             region.setNombre("Paraguay");
             region.setFechamodificacion(new Date());
-            region.setIdempresa(Long.parseLong("3"));
             regiones.add(region);
         }
-        dataLinkCat.persist(regiones);
-        String codigo = "MXN";
-        assertTrue(regiones.get(4).getCodigo().trim().equals(codigo));        
+        dataLink.persist(regiones);
+        assertNotNull(regiones.get(0).getNombre());
+        dataLink.remove(regiones);
     }
     @Test
     public void testMergeRegion() throws Exception {
@@ -75,15 +73,14 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setIdregion(Long.parseLong("119"));
         region.setCodigo("PYG");
         region.setNombre("Paraguay");
         region.setFechamodificacion(new Date());
-        region.setIdempresa(Long.parseLong("3"));
-        dataLinkCat.persist(region);   
-        IDataResult dataResult = dataLinkCat.merge(region);
+        dataLink.persist(region);   
+        IDataResult dataResult = dataLink.merge(region);
         Region regionResultado = dataResult.getRowUpdated();
-        assertEquals(region.getIdregion(), regionResultado.getIdregion());  
+        assertEquals(region.getIdregion(), regionResultado.getIdregion());
+        dataLink.remove(region);
     } 
     
     @Test
@@ -99,17 +96,16 @@ public class RegionTest extends TestClass{
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
-            region.setIdregion(Long.parseLong("119"));
             region.setCodigo(codigo_aux);
             region.setNombre("Paraguay");
             region.setFechamodificacion(new Date());
-            region.setIdempresa(Long.parseLong("3"));
             regiones.add(region);
         }
-        dataLinkCat.merge(regiones);
+        dataLink.merge(regiones);
         for (int i = 0; i < 5; i++) {
             assertTrue(regiones.get(i).getCodigo().trim().equals(v_codigo[i]));
         }
+        dataLink.remove(regiones);
     }
     @Test
     public void testRemoveRegion() throws Exception {
@@ -118,13 +114,11 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setIdregion(Long.parseLong("119"));
         region.setCodigo("PYG");
         region.setNombre("Paraguay");
         region.setFechamodificacion(new Date());
-        region.setIdempresa(Long.parseLong("3"));
-        dataLinkCat.persist(region);   
-        dataLinkCat.remove(region);
+        dataLink.persist(region);   
+        dataLink.remove(region);
         List<Object> queryRegion = dataLink.findByNativeQuery("select * from {schema}.region where codigo='MXN'", null);
         assertTrue(queryRegion.isEmpty());
     } 
@@ -141,15 +135,13 @@ public class RegionTest extends TestClass{
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
-            region.setIdregion(Long.parseLong("119"));
             region.setCodigo(codigo_aux);
             region.setNombre("Paraguay");
             region.setFechamodificacion(new Date());
-            region.setIdempresa(Long.parseLong("3"));
             regiones.add(region);
         }
-        dataLinkCat.persist(regiones);
-        dataLinkCat.remove(regiones);
+        dataLink.persist(regiones);
+        dataLink.remove(regiones);
         regiones = dataLink.findListByQuery("select o from Region o where codigo='MXN'", null);
         assertTrue(regiones.isEmpty());
     }
@@ -160,18 +152,17 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setIdregion(Long.parseLong("119"));
         region.setCodigo("PYG");
         region.setNombre("Paraguay");
         region.setFechamodificacion(new Date());
-        region.setIdempresa(Long.parseLong("3"));
-        dataLinkCat.persist(region);
+        dataLink.persist(region);
         region.setNombre("Argentina");
-        dataLinkCat.update(region);
+        dataLink.update(region);
         region.setCodigo("MXN");
-        dataLinkCat.update(region);
+        dataLink.update(region);
         String expCodigo = "MXN";
         assertEquals(expCodigo, region.getCodigo());
+        dataLink.remove(region);
     } 
     
     @Test
@@ -187,23 +178,22 @@ public class RegionTest extends TestClass{
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
-            region.setIdregion(Long.parseLong("119"));
             region.setCodigo(codigo_aux);
             region.setNombre("Paraguay");
             region.setFechamodificacion(new Date());
-            region.setIdempresa(Long.parseLong("3"));
             regiones.add(region);
         }
-        dataLinkCat.update(regiones);
+        dataLink.update(regiones);
         Region region = new Region();
         region.setNombre("Colombia");
         regiones.add(region);
-        dataLinkCat.update(regiones);
+        dataLink.update(regiones);
         region.setCodigo("MXN");
         regiones.add(region);
-        dataLinkCat.update(regiones);
+        dataLink.update(regiones);
         regiones = dataLink.findListByQuery("select o from Region o where codigo='MXN'", null);
         assertTrue(regiones.isEmpty());
+        dataLink.remove(regiones);
     }
     @Test
     public void testUpdateRegionDataObject() throws NamingException, SessionError, Exception {
@@ -219,10 +209,8 @@ public class RegionTest extends TestClass{
         region.insertRow();
         region.setField("codigo", "EUR");
         region.setField("nombre", "Europa");
-
         IDataSet dataSet = new DataSet();
         dataSet.addDataObject("region", region);
-
         boolean result = dataLink.update(dataSet).isSuccessFul();
         assertTrue(result);
     }

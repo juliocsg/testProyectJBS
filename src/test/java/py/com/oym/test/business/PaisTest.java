@@ -44,14 +44,14 @@ public class PaisTest extends TestClass {
         Pais pais = new Pais();
         pais.setCodigo("119");
         pais.setFechamodificacion(new Date());
-        pais.setIdempresa(Long.MIN_VALUE);
-        pais.setIdpais(Long.MAX_VALUE);
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setNombre("Argentina");
-        IDataResult dataResult = dataLinkCat.persist(pais);
+        IDataResult dataResult = dataLink.persist(pais);
         Pais paisResultado = dataResult.getRowUpdated();
-        assertEquals(pais.getCodigo(), paisResultado.getCodigo());
+        String nombre = "Argentina";
+        assertEquals(nombre, paisResultado.getNombre());
+        dataLink.remove(pais);
     }
 
     @Test
@@ -67,16 +67,15 @@ public class PaisTest extends TestClass {
             Pais pais = new Pais();
             pais.setCodigo("11"+(i+5));
             pais.setFechamodificacion(new Date());
-            pais.setIdempresa(Long.MIN_VALUE);
-            pais.setIdpais(Long.MAX_VALUE);
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
             pais.setNombre("Paraguay");
             paises.add(pais);
         }
-        dataLinkCat.persist(paises);
-        String codigo = "117";
-        assertTrue(paises.get(2).getCodigo().trim().equals(codigo));
+        dataLink.persist(paises);
+        assertNotNull(paises.get(0).getNombre());
+        dataLink.remove(paises);
+        
     }
 
     @Test
@@ -90,15 +89,15 @@ public class PaisTest extends TestClass {
         Pais pais = new Pais();
         pais.setCodigo("119");
         pais.setFechamodificacion(new Date());
-        pais.setIdempresa(Long.MIN_VALUE);
-        pais.setIdpais(Long.MAX_VALUE);
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setNombre("Argentina");
-        dataLinkCat.persist(pais);
-        IDataResult dataResult = dataLinkCat.merge(pais);
+        dataLink.persist(pais);
+        IDataResult dataResult = dataLink.merge(pais);
         Pais paisResultado = dataResult.getRowUpdated();
-        assertEquals(pais.getCodigo(), paisResultado.getCodigo());
+        String nombre = "Argentina";
+        assertEquals(nombre, paisResultado.getNombre());
+        dataLink.remove(pais);
     }
 
     @Test
@@ -114,18 +113,17 @@ public class PaisTest extends TestClass {
             Pais pais = new Pais();
             pais.setCodigo("11"+(i+5));
             pais.setFechamodificacion(new Date());
-            pais.setIdempresa(Long.MIN_VALUE);
-            pais.setIdpais(Long.MAX_VALUE);
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
             pais.setNombre("Paraguay");
             paises.add(pais);
         }
         //Merge
-        dataLinkCat.merge(paises);
+        dataLink.merge(paises);
         for (int i = 0; i < 5; i++) {
             assertTrue(paises.get(i).getCodigo().equals("11"+(i+5)));
         }
+        dataLink.remove(paises);
     }
 
     @Test
@@ -139,13 +137,11 @@ public class PaisTest extends TestClass {
         Pais pais = new Pais();
         pais.setCodigo("119");
         pais.setFechamodificacion(new Date());
-        pais.setIdempresa(Long.MIN_VALUE);
-        pais.setIdpais(Long.MAX_VALUE);
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setNombre("Argentina");
-        dataLinkCat.persist(pais);
-        dataLinkCat.remove(pais);
+        dataLink.persist(pais);
+        dataLink.remove(pais);
         List<Object> queryPais = dataLink.findByNativeQuery("select * from {schema}.pais where nombre = 'Argentina'", null);
         assertTrue(queryPais.isEmpty());
     }
@@ -162,8 +158,6 @@ public class PaisTest extends TestClass {
             Pais pais = new Pais();
             pais.setCodigo("115");
             pais.setFechamodificacion(new Date());
-            pais.setIdempresa(Long.MIN_VALUE);
-            pais.setIdpais(Long.MAX_VALUE);
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
             pais.setNombre("Paraguay");
@@ -187,16 +181,16 @@ public class PaisTest extends TestClass {
         Pais pais = new Pais();
         pais.setCodigo("119");
         pais.setFechamodificacion(new Date());
-        pais.setIdempresa(Long.MIN_VALUE);
-        pais.setIdpais(Long.MAX_VALUE);
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setNombre("Argentina");
-        dataLinkCat.persist(pais);
+        dataLink.persist(pais);
         pais.setNombre("Brasil");
-        dataLinkCat.update(pais);
+        dataLink.update(pais);
         String expPais = "Brasil";
         assertEquals(expPais, pais.getNombre());
+        dataLink.remove(pais);
+
     }
     @Test
     public void testUpdateListPais() throws Exception {
@@ -211,8 +205,6 @@ public class PaisTest extends TestClass {
             Pais pais = new Pais();
             pais.setCodigo("115");
             pais.setFechamodificacion(new Date());
-            pais.setIdempresa(Long.MIN_VALUE);
-            pais.setIdpais(Long.MAX_VALUE);
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
             pais.setNombre("Paraguay");
@@ -229,6 +221,7 @@ public class PaisTest extends TestClass {
         dataLink.update(paises);
         paises = dataLink.findListByQuery("select o from Pais o where codigo='115'", null);
         assertTrue(paises.isEmpty());
+        dataLink.remove(paises);
     }
     @Test
     public void testUpdatePaisDataObject() throws NamingException, SessionError, Exception {

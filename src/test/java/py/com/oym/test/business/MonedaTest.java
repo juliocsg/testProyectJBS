@@ -45,17 +45,16 @@ public class MonedaTest extends TestClass {
             return; 
         }
         Moneda moneda = new Moneda();
-        moneda.setIdmoneda(Long.parseLong("119"));
         moneda.setCodigo("PYG");
         moneda.setNombre("Guarani");
-        moneda.setCambio(BigDecimal.ZERO);
+        moneda.setCambio(BigDecimal.ONE);
         moneda.setDecimalpoint(Short.MIN_VALUE);
         moneda.setObservacion("34424");
-        moneda.setAppuser("J");
-        moneda.setIdempresa(Long.parseLong("3"));
-        IDataResult dataResult = dataLinkCat.persist(moneda);
+        IDataResult dataResult = dataLink.persist(moneda);
         Moneda monedaResultado = dataResult.getRowUpdated();
-        assertEquals(moneda.getIdmoneda(), monedaResultado.getIdmoneda());   
+        String nombre = "Guarani";
+        assertEquals(nombre,monedaResultado.getNombre());
+        dataLink.remove(moneda);
     }
     @Test
     public void testPersistListMoneda() throws Exception{
@@ -70,19 +69,16 @@ public class MonedaTest extends TestClass {
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
-            moneda.setIdmoneda(Long.parseLong("119"));
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Guarani");
-            moneda.setCambio(BigDecimal.ZERO);
+            moneda.setCambio(BigDecimal.ONE);
             moneda.setDecimalpoint(Short.MIN_VALUE);
             moneda.setObservacion("34424");
-            moneda.setAppuser("J");
-            moneda.setIdempresa(Long.parseLong("3"));
             monedas.add(moneda);
         }
-        dataLinkCat.persist(monedas);
-        String codigo = "MXN";
-        assertTrue(monedas.get(3).getCodigo().trim().equals(codigo));
+        dataLink.persist(monedas);
+        assertNotNull(monedas.get(0).getNombre());
+        dataLink.remove(monedas);
     }
     @Test
     public void testMergeMoneda() throws Exception 
@@ -93,17 +89,16 @@ public class MonedaTest extends TestClass {
             return; 
         }
         Moneda moneda = new Moneda();
-        moneda.setIdmoneda(Long.parseLong("119"));
         moneda.setCodigo("PYG");
         moneda.setNombre("Guarani");
-        moneda.setCambio(BigDecimal.ZERO);
+        moneda.setCambio(BigDecimal.ONE);
         moneda.setDecimalpoint(Short.MIN_VALUE);
         moneda.setObservacion("34424");
-        moneda.setAppuser("J");
-        moneda.setIdempresa(Long.parseLong("3"));
-        IDataResult dataResult = dataLinkCat.merge(moneda);
+        IDataResult dataResult = dataLink.merge(moneda);
         Moneda monedaResultado = dataResult.getRowUpdated();
-        assertEquals(moneda.getIdmoneda(), monedaResultado.getIdmoneda());   
+        String nombre = "Guarani";
+        assertEquals(nombre,monedaResultado.getNombre());
+        dataLink.remove(moneda);
     }
     @Test
     public void testMergeListMoneda() throws Exception{
@@ -118,20 +113,18 @@ public class MonedaTest extends TestClass {
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
-            moneda.setIdmoneda(Long.parseLong("119"));
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Guarani");
-            moneda.setCambio(BigDecimal.ZERO);
+            moneda.setCambio(BigDecimal.ONE);
             moneda.setDecimalpoint(Short.MIN_VALUE);
             moneda.setObservacion("34424");
-            moneda.setAppuser("J");
-            moneda.setIdempresa(Long.parseLong("3"));
             monedas.add(moneda);
         }
-        dataLinkCat.merge(monedas);
+        dataLink.merge(monedas);
         for (int i = 0; i < 5; i++){
             assertTrue(monedas.get(i).getCodigo().trim().equals(v_codigo[i]));    
         }
+        dataLink.remove(monedas);
     }
     
     @Test
@@ -143,19 +136,15 @@ public class MonedaTest extends TestClass {
             return; 
         }
         Moneda moneda = new Moneda();
-        moneda.setIdmoneda(Long.parseLong("119"));
         moneda.setCodigo("PYG");
         moneda.setNombre("Guarani");
-        moneda.setCambio(BigDecimal.ZERO);
+        moneda.setCambio(BigDecimal.ONE);
         moneda.setDecimalpoint(Short.MIN_VALUE);
         moneda.setObservacion("34424");
-        moneda.setAppuser("J");
-        moneda.setIdempresa(Long.parseLong("3"));
-        dataLinkCat.persist(moneda);
-        dataLinkCat.remove(moneda);
+        dataLink.persist(moneda);
+        dataLink.remove(moneda);
         List<Object> queryMoneda = dataLink.findByNativeQuery("select * from {schema}.moneda where idmoneda = 119", null);        
         assertTrue(queryMoneda.isEmpty());
-        //assertNull(moneda); 
     }
     @Test
     public void testRemoveListMoneda() throws Exception{
@@ -164,26 +153,23 @@ public class MonedaTest extends TestClass {
             System.out.println(error);
             return;
         }
-        String codigo_aux = "";
+        String codigo_aux;
         List<Moneda> monedas = new ArrayList();
         String[] v_codigo = {"PYG","USD","RUB","MXN","BTC"};
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
-            moneda.setIdmoneda(Long.parseLong("119"));
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Guarani");
-            moneda.setCambio(BigDecimal.ZERO);
+            moneda.setCambio(BigDecimal.ONE);
             moneda.setDecimalpoint(Short.MIN_VALUE);
             moneda.setObservacion("34424");
-            moneda.setAppuser("J");
-            moneda.setIdempresa(Long.parseLong("3"));
             monedas.add(moneda);
         }
         //Remove
         dataLink.persist(monedas);
         dataLink.remove(monedas);
-        monedas = dataLink.findListByQuery("select o from Moneda o where idmoneda='119'", null);
+        monedas = dataLink.findListByQuery("select o from Moneda o where codigo='PYG'", null);
         assertTrue(monedas.isEmpty());
     }   
     @Test
@@ -196,19 +182,17 @@ public class MonedaTest extends TestClass {
         }
         //Update
         Moneda moneda = new Moneda();
-        moneda.setIdmoneda(Long.parseLong("119"));
         moneda.setCodigo("PYG");
         moneda.setNombre("Guarani");
-        moneda.setCambio(BigDecimal.ZERO);
+        moneda.setCambio(BigDecimal.ONE);
         moneda.setDecimalpoint(Short.MIN_VALUE);
         moneda.setObservacion("34424");
-        moneda.setAppuser("J");
-        moneda.setIdempresa(Long.parseLong("3"));
-        dataLinkCat.persist(moneda);
+        dataLink.persist(moneda);
         moneda.setNombre("Peso");
-        dataLinkCat.update(moneda);
+        dataLink.update(moneda);
         String expMoneda = "Peso";
         assertEquals(expMoneda, moneda.getNombre());
+        dataLink.remove(moneda);
     }
     @Test
     public void testUpdateListMoneda() throws Exception{
@@ -217,20 +201,17 @@ public class MonedaTest extends TestClass {
             System.out.println(error);
             return;
         }
-        String codigo_aux = "";
+        String codigo_aux;
         List<Moneda> monedas = new ArrayList();
         String[] v_codigo = {"PYG","USD","RUB","MXN","BTC"};
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
-            moneda.setIdmoneda(Long.parseLong("119"));
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Guarani");
-            moneda.setCambio(BigDecimal.ZERO);
+            moneda.setCambio(BigDecimal.ONE);
             moneda.setDecimalpoint(Short.MIN_VALUE);
             moneda.setObservacion("34424");
-            moneda.setAppuser("J");
-            moneda.setIdempresa(Long.parseLong("3"));
             monedas.add(moneda);
         }
         //Update
@@ -242,8 +223,9 @@ public class MonedaTest extends TestClass {
         moneda.setCodigo("GBP");
         monedas.add(moneda);
         dataLink.update(monedas);
-        monedas = dataLink.findListByQuery("select o from Moneda o where idmoneda='119'", null);
+        monedas = dataLink.findListByQuery("select o from Moneda o where nombre='Dolar'", null);
         assertTrue(monedas.isEmpty());
+        dataLink.remove(monedas);
     }   
     
     @Test
