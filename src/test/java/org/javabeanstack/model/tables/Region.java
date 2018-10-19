@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
@@ -34,7 +35,7 @@ public class Region extends DataRow implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "SOME_SEQUENCE")
     @Basic(optional = false)
-    @Column(name = "idregion", unique=true)
+    @JoinColumn(name = "idregion", unique=true)
     private Long idregion;
         
     @Basic(optional = false)

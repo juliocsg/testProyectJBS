@@ -9,13 +9,17 @@ package py.com.oym.test.business;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import javassist.compiler.Parser;
 import javax.naming.NamingException;
 import org.javabeanstack.data.IDataResult;
+import org.javabeanstack.data.IDataRow;
 import org.javabeanstack.data.IDataSet;
 import org.javabeanstack.data.IGenericDAORemote;
 import org.javabeanstack.data.model.DataSet;
 import org.javabeanstack.datactrl.DataObject;
 import org.javabeanstack.datactrl.IDataObject;
+import org.javabeanstack.error.IErrorReg;
 import org.javabeanstack.exceptions.SessionError;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -45,15 +49,15 @@ public class MonedaTest extends TestClass {
             return; 
         }
         Moneda moneda = new Moneda();
-        moneda.setCodigo("PYG");
-        moneda.setNombre("Guarani");
+        moneda.setCodigo("ARG");
+        moneda.setNombre("pesos argentinos");
         moneda.setCambio(BigDecimal.ONE);
-        ////moneda.setDecimalpoint(Short.MIN_VALUE);
-        moneda.setObservacion("34424");
+        moneda.setIdempresa(Long.parseLong("41"));
         IDataResult dataResult = dataLink.persist(moneda);
-        //Moneda monedaResultado = dataResult.getRowUpdated();
+        Moneda monedaResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());    
+        dataLink.remove(monedaResult);
     }
     @Test
     public void testPersistListMoneda() throws Exception{
@@ -64,22 +68,21 @@ public class MonedaTest extends TestClass {
         }
         String codigo_aux;
         List<Moneda> monedas = new ArrayList();
-        String[] v_codigo = {"PYG","USD","RUB","MXN","BTC"};
+        String[] v_codigo = {"AUD","ARG","RUB","MXN","BTC"};
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
             moneda.setCodigo(codigo_aux);
-            moneda.setNombre("Guarani");
+            moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
-            //moneda.setDecimalpoint(Short.MIN_VALUE);
-            moneda.setObservacion("34424");
+            moneda.setIdempresa(Long.parseLong("41"));
             monedas.add(moneda);
         }
         IDataResult dataResult = dataLink.persist(monedas);
-        //assertNotNull(monedas.get(0).getNombre());
+        List<IDataRow> monedasResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(monedas);
+        dataLink.remove(monedasResult);
     }
     @Test
     public void testMergeMoneda() throws Exception 
@@ -90,19 +93,23 @@ public class MonedaTest extends TestClass {
             return; 
         }
         Moneda moneda = new Moneda();
-        moneda.setCodigo("PYG");
-        moneda.setNombre("Guarani");
+        moneda.setCodigo("ARG");
+        moneda.setNombre("Pesos Argentinos");
         moneda.setCambio(BigDecimal.ONE);
-        //moneda.setDecimalpoint(Short.MIN_VALUE);
-        moneda.setObservacion("34424");
+        moneda.setIdempresa(Long.parseLong("41"));
+        dataLink.persist(moneda);
+        moneda = dataLink.findByQuery("select o from Moneda o where codigo = 'ARG'", null);
+        moneda.setNombre("Pesos Arg");
         IDataResult dataResult = dataLink.merge(moneda);
-        //Moneda monedaResultado = dataResult.getRowUpdated();
+        Moneda monedaResult = dataResult.getRowUpdated();
         //String nombre = "Guarani";
-        //assertEquals(nombre,monedaResultado.getNombre());
+        //assertEquals(nombre,monedaResult.getNombre());
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(moneda);
+        dataLink.remove(monedaResult);
     }
+    
+    //Falta corregir
     @Test
     public void testMergeListMoneda() throws Exception{
         System.out.println("testMergeListMoneda");
@@ -110,28 +117,32 @@ public class MonedaTest extends TestClass {
             System.out.println(error);
             return;
         }
-        String codigo_aux = "";
+        String codigo_aux;
         List<Moneda> monedas = new ArrayList();
-        String[] v_codigo = {"PYG","USD","RUB","MXN","BTC"};
+        String[] v_codigo = {"AUD","ARG","RUB","MXN","BTC"};
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
             moneda.setCodigo(codigo_aux);
-            moneda.setNombre("Guarani");
+            moneda.setNombre("Libra");
             moneda.setCambio(BigDecimal.ONE);
-            //moneda.setDecimalpoint(Short.MIN_VALUE);
-            moneda.setObservacion("34424");
+            moneda.setIdempresa(Long.parseLong("41"));
             monedas.add(moneda);
+        } 
+        dataLink.persist(monedas);
+        //IDataResult dataResult = dataLink.persist(monedas);
+        monedas = dataLink.findListByQuery("select o from Moneda o where nombre = 'Libra'", null);
+        for (int i = 0; i < 5; i++){
+           monedas.get(i).setNombre("Mexicanos"); 
         }
         IDataResult dataResult = dataLink.merge(monedas);
-        /*dataLink.merge(monedas);
-        for (int i = 0; i < 5; i++){
-            assertTrue(monedas.get(i).getCodigo().trim().equals(v_codigo[i]));    
-        }*/
+        List<IDataRow> monedasResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(monedas);
+        assertTrue(monedasResult.get(0).getErrors().isEmpty());
+        //dataLink.remove(monedasResult);
     }
+   
     @Test
     public void testRemoveMoneda() throws Exception 
     {
@@ -142,17 +153,16 @@ public class MonedaTest extends TestClass {
         }
         Moneda moneda = new Moneda();
         moneda.setCodigo("PYG");
-        moneda.setNombre("Guarani");
+        moneda.setNombre("Dòlares varios");
         moneda.setCambio(BigDecimal.ONE);
+        moneda.setIdempresa(Long.parseLong("41"));
         //moneda.setDecimalpoint(Short.MIN_VALUE);
-        moneda.setObservacion("34424");
-        dataLink.persist(moneda);
+        
         IDataResult dataResult = dataLink.persist(moneda);
+        Moneda monedaResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(moneda);
-        /*List<Object> queryMoneda = dataLink.findByNativeQuery("select * from {schema}.moneda where idmoneda = 119", null);        
-        assertTrue(queryMoneda.isEmpty());*/
+        dataLink.remove(monedaResult);
     }
     @Test
     public void testRemoveListMoneda() throws Exception{
@@ -163,26 +173,24 @@ public class MonedaTest extends TestClass {
         }
         String codigo_aux;
         List<Moneda> monedas = new ArrayList();
-        String[] v_codigo = {"PYG","USD","RUB","MXN","BTC"};
+        String[] v_codigo = {"AUD","ARG","RUB","MXN","BTC"};
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
             moneda.setCodigo(codigo_aux);
-            moneda.setNombre("Guarani");
+            moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
-            //moneda.setDecimalpoint(Short.MIN_VALUE);
-            moneda.setObservacion("34424");
+            moneda.setIdempresa(Long.parseLong("41"));
             monedas.add(moneda);
         }
         //Remove
-        dataLink.persist(monedas);
         IDataResult dataResult = dataLink.persist(monedas);
+        List<IDataRow> monedasResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(monedas);
-        /*monedas = dataLink.findListByQuery("select o from Moneda o where codigo='PYG'", null);
-        assertTrue(monedas.isEmpty());*/
+        dataLink.remove(monedasResult);
     }   
+   
     @Test
     public void testUpdateMoneda() throws Exception 
     {
@@ -191,23 +199,30 @@ public class MonedaTest extends TestClass {
             System.out.println(error);
             return; 
         }
-        //Update
+        //Persist
         Moneda moneda = new Moneda();
         moneda.setCodigo("PYG");
-        moneda.setNombre("Guarani");
+        moneda.setNombre("Dòlares varios");
         moneda.setCambio(BigDecimal.ONE);
-        //moneda.setDecimalpoint(Short.MIN_VALUE);
-        moneda.setObservacion("34424");
-        dataLink.persist(moneda);
-        IDataResult dataResult = dataLink.persist(moneda);
+        moneda.setIdempresa(Long.parseLong("41"));
+        moneda.setAction(IDataRow.INSERT);
+        dataLink.update(moneda);
+        
+        //Merge
+        moneda = dataLink.findByQuery("select o from Moneda o where nombre='Dòlares varios'", null);
+        moneda.setNombre("Peso");
+        moneda.setAction(IDataRow.UPDATE);
+        dataLink.update(moneda);
+        
+        //Remove
+        moneda.setAction(IDataRow.DELETE);
+        
+        IDataResult dataResult = dataLink.update(moneda);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        /*moneda.setNombre("Peso");
-        dataLink.update(moneda);
-        String expMoneda = "Peso";
-        assertEquals(expMoneda, moneda.getNombre());
-        dataLink.remove(moneda);*/
+        
     }
+    
     @Test
     public void testUpdateListMoneda() throws Exception{
         System.out.println("testUpdateListMoneda");
@@ -215,28 +230,43 @@ public class MonedaTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Insertar
         String codigo_aux;
         List<Moneda> monedas = new ArrayList();
-        String[] v_codigo = {"PYG","USD","RUB","MXN","BTC"};
+        String[] v_codigo = {"AUD","ARG","RUB","MXN","BTC"};
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Moneda moneda = new Moneda();
             moneda.setCodigo(codigo_aux);
-            moneda.setNombre("Guarani");
+            moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
+            moneda.setIdempresa(Long.parseLong("41"));
             //moneda.setDecimalpoint(Short.MIN_VALUE);
-            moneda.setObservacion("34424");
+            moneda.setAction(IDataRow.INSERT);
             monedas.add(moneda);
         }
-        //Update
         dataLink.update(monedas);
-        Moneda moneda = new Moneda();
+        
+        //Merge
+        monedas = dataLink.findListByQuery("select o from Moneda o where nombre = 'Dòlares varios'", null);
+        for (int i = 0; i < 5; i++) {
+            monedas.get(i).setNombre("pesos mexicanos");
+            monedas.get(i).setAction(IDataRow.UPDATE);
+        }
+        dataLink.update(monedas);
+        
+        //Remove
+        for (int i = 0; i < 5; i++) {
+            monedas.get(i).setAction(IDataRow.DELETE);
+        }
+        dataLink.update(monedas);
+        /*Moneda moneda = new Moneda();
         moneda.setNombre("Dolar");
         monedas.add(moneda);
         dataLink.update(monedas);
         moneda.setCodigo("GBP");
         monedas.add(moneda);
-        dataLink.update(monedas);
+        dataLink.update(monedas);*/
         IDataResult dataResult = dataLink.update(monedas);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
@@ -273,7 +303,7 @@ public class MonedaTest extends TestClass {
         pais.open();
         pais.insertRow();
         pais.setField("codigo", "119");
-        pais.setField("nombre", "Paraguay");
+        pais.setField("nombre", "Brasil");
         pais.setField("region", region.getRow());
         pais.setField("region", moneda.getRow());
 

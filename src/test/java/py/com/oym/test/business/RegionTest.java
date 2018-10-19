@@ -37,14 +37,16 @@ public class RegionTest extends TestClass{
         Region region = new Region();
         region.setCodigo("PYG");
         region.setNombre("Paraguay");
+        region.setIdempresa(Long.parseLong("41"));
         region.setFechamodificacion(new Date());
-        IDataResult dataResult = dataLink.persist(region);        
+        IDataResult dataResult = dataLink.persist(region); 
+        Region regionResult = dataResult.getRowUpdated();
         /*Region regionResultado = dataResult.getRowUpdated();
         String nombre = "Paraguay";
         assertEquals(nombre,regionResultado.getNombre());*/
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(region);
+        dataLink.remove(regionResult);
     } 
     @Test
     public void testPersistListRegion() throws Exception{
