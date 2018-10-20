@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
 import org.javabeanstack.data.IDataResult;
+import org.javabeanstack.data.IDataRow;
 import org.javabeanstack.data.IDataSet;
 import org.javabeanstack.data.model.DataSet;
 import org.javabeanstack.datactrl.DataObject;
@@ -35,14 +36,14 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setCodigo("PYG");
-        region.setNombre("Paraguay");
+        region.setCodigo("ARG");
+        region.setNombre("Argentina");
         region.setIdempresa(Long.parseLong("41"));
         region.setFechamodificacion(new Date());
         IDataResult dataResult = dataLink.persist(region); 
         Region regionResult = dataResult.getRowUpdated();
         /*Region regionResultado = dataResult.getRowUpdated();
-        String nombre = "Paraguay";
+        String nombre = "Argentina";
         assertEquals(nombre,regionResultado.getNombre());*/
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
@@ -55,23 +56,24 @@ public class RegionTest extends TestClass{
             System.out.println(error);
             return;
         }
-        String[] v_codigo = {"PYG","RUB", "USD", "EUR", "MXN"};
+        String[] v_codigo = {"ARG","RUB", "USD", "EUR", "MXN"};
         String codigo_aux;
         List<Region> regiones = new ArrayList();
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
             region.setCodigo(codigo_aux);
-            region.setNombre("Paraguay");
+            region.setNombre("Argentina");
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
         dataLink.persist(regiones);
         IDataResult dataResult = dataLink.persist(regiones);
+        List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         //assertNotNull(regiones.get(0).getNombre());
-        dataLink.remove(regiones);
+        dataLink.remove(regionesResult);
     }
     @Test
     public void testMergeRegion() throws Exception {
@@ -80,16 +82,17 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setCodigo("PYG");
-        region.setNombre("Paraguay");
+        region.setCodigo("ARG");
+        region.setNombre("Argentina");
         region.setFechamodificacion(new Date());
         dataLink.persist(region);   
         IDataResult dataResult = dataLink.merge(region);
+        Region regionResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         //Region regionResultado = dataResult.getRowUpdated();
         //assertEquals(region.getIdregion(), regionResultado.getIdregion());
-        dataLink.remove(region);
+        dataLink.remove(regionResult);
     } 
     
     @Test
@@ -99,14 +102,14 @@ public class RegionTest extends TestClass{
             System.out.println(error);
             return;
         }
-        String[] v_codigo = {"PYG","RUB", "USD", "EUR", "MXN"};
+        String[] v_codigo = {"ARG","RUB", "USD", "EUR", "MXN"};
         String codigo_aux;
         List<Region> regiones = new ArrayList();
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
             region.setCodigo(codigo_aux);
-            region.setNombre("Paraguay");
+            region.setNombre("Argentina");
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
@@ -127,8 +130,8 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setCodigo("PYG");
-        region.setNombre("Paraguay");
+        region.setCodigo("ARG");
+        region.setNombre("Argentina");
         region.setFechamodificacion(new Date());
         dataLink.persist(region); 
         IDataResult dataResult = dataLink.persist(region);
@@ -145,14 +148,14 @@ public class RegionTest extends TestClass{
             System.out.println(error);
             return;
         }
-        String[] v_codigo = {"PYG","RUB", "USD", "EUR", "MXN"};
+        String[] v_codigo = {"ARG","RUB", "USD", "EUR", "MXN"};
         String codigo_aux;
         List<Region> regiones = new ArrayList();
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
             region.setCodigo(codigo_aux);
-            region.setNombre("Paraguay");
+            region.setNombre("Argentina");
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
@@ -171,8 +174,8 @@ public class RegionTest extends TestClass{
             System.out.println(error);
         }
         Region region = new Region();
-        region.setCodigo("PYG");
-        region.setNombre("Paraguay");
+        region.setCodigo("ARG");
+        region.setNombre("Argentina");
         region.setFechamodificacion(new Date());
         dataLink.persist(region);
         region.setNombre("Argentina");
@@ -194,14 +197,14 @@ public class RegionTest extends TestClass{
             System.out.println(error);
             return;
         }
-        String[] v_codigo = {"PYG","RUB", "USD", "EUR", "MXN"};
+        String[] v_codigo = {"ARG","RUB", "USD", "EUR", "MXN"};
         String codigo_aux = "";
         List<Region> regiones = new ArrayList();
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
             Region region = new Region();
             region.setCodigo(codigo_aux);
-            region.setNombre("Paraguay");
+            region.setNombre("Argentina");
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }

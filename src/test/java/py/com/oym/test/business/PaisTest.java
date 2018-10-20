@@ -17,6 +17,7 @@ import org.javabeanstack.data.model.DataSet;
 import org.javabeanstack.datactrl.DataObject;
 import org.javabeanstack.datactrl.IDataObject;
 import org.javabeanstack.exceptions.SessionError;
+import org.javabeanstack.model.tables.Moneda;
 import org.javabeanstack.model.tables.Pais;
 import org.javabeanstack.model.tables.Region;
 import org.junit.Test;
@@ -42,6 +43,9 @@ public class PaisTest extends TestClass {
             return;
         }
         //Persist
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Region
         Region region;
         region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
@@ -55,6 +59,7 @@ public class PaisTest extends TestClass {
         pais.setNombre("Argentina");
         pais.setIdempresa(Long.parseLong("41"));
         pais.setRegion(region);
+        pais.setMoneda(moneda);
         IDataResult dataResult = dataLink.persist(pais);
         Pais paisResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -69,6 +74,9 @@ public class PaisTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Region
         Region region;
         region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
@@ -84,13 +92,14 @@ public class PaisTest extends TestClass {
             pais.setNoedit(Boolean.FALSE);
             pais.setNombre("Paraguay");
             pais.setRegion(region);
+            pais.setMoneda(moneda);
             paises.add(pais);
         }
         IDataResult dataResult = dataLink.persist(paises);
-        List<IDataRow> paisResults = dataResult.getRowsUpdated();
+        List<IDataRow> paisesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(paisResults);
+        dataLink.remove(paisesResult);
     }
 
     @Test
@@ -100,6 +109,9 @@ public class PaisTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Merge
         Region region;
         region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
@@ -112,6 +124,10 @@ public class PaisTest extends TestClass {
         pais.setLongitud(BigDecimal.ONE);
         pais.setNombre("Argentina");
         pais.setRegion(region);
+        pais.setMoneda(moneda);
+        dataLink.persist(pais);
+        pais = dataLink.findByQuery("select o from Pais o where codigo = '119'", null);
+        pais.setNombre("Perú");
         IDataResult dataResult = dataLink.merge(pais);
         Pais paisResult = dataResult.getRowUpdated();
         //String nombre = "Argentina";
@@ -128,6 +144,11 @@ public class PaisTest extends TestClass {
             System.out.println(error);
             return;
         }
+        Region region;
+        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         List<Pais> paises = new ArrayList();
         //Persist
         for (int i = 0; i < 5; i++) {
@@ -138,8 +159,15 @@ public class PaisTest extends TestClass {
             pais.setNoedit(Boolean.FALSE);
             pais.setIdempresa(Long.parseLong("41"));
             pais.setLongitud(BigDecimal.ONE);
-            pais.setNombre("Paraguay");
+            pais.setNombre("Argentina");
+            pais.setMoneda(moneda);
+            pais.setRegion(region);
             paises.add(pais);
+        }
+        dataLink.persist(paises);
+        paises = dataLink.findListByQuery("select o from Pais o where nombre='Argentina'", null);
+        for (int i = 0; i < 5; i++) {
+            paises.get(i).setNombre("Mexicanos");
         }
         //Merge
         dataLink.merge(paises);
@@ -147,9 +175,10 @@ public class PaisTest extends TestClass {
             assertTrue(paises.get(i).getCodigo().equals("11"+(i+5)));
         }*/
         IDataResult dataResult = dataLink.merge(paises);
-        System.out.println(dataResult);
+        List<IDataRow> paisesResult = dataResult.getRowsUpdated();
+        System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(paises);
+        dataLink.remove(paisesResult);
     }
 
     @Test
@@ -159,6 +188,12 @@ public class PaisTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Region
+        Region region;
+        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Remove
         Pais pais = new Pais();
         pais.setCodigo("119");
@@ -168,10 +203,14 @@ public class PaisTest extends TestClass {
         pais.setIdempresa(Long.parseLong("41"));
         pais.setLongitud(BigDecimal.ONE);
         pais.setNombre("Argentina");
-        dataLink.persist(pais);
+        pais.setMoneda(moneda);
+        pais.setRegion(region);
+        
         IDataResult dataResult = dataLink.persist(pais);
+        Pais paisResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
+        dataLink.remove(paisResult);
         /*
         dataLink.remove(pais);
         List<Object> queryPais = dataLink.findByNativeQuery("select * from {schema}.pais where nombre = 'Argentina'", null);
@@ -184,6 +223,12 @@ public class PaisTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Region
+        Region region;
+        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         List<Pais> paises = new ArrayList();
         //Persist
         for (int i = 0; i < 5; i++) {
@@ -195,25 +240,33 @@ public class PaisTest extends TestClass {
             pais.setNoedit(Boolean.FALSE);
             pais.setIdempresa(Long.parseLong("41"));
             pais.setNombre("Paraguay");
+            pais.setMoneda(moneda);
+            pais.setRegion(region);
             paises.add(pais);
         }
         //Remove
         dataLink.persist(paises);
         IDataResult dataResult = dataLink.persist(paises);
+        paises = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        /*dataLink.remove(paises);
-        paises = dataLink.findListByQuery("select o from Pais o where codigo='115'", null);
-        assertTrue(paises.isEmpty());*/
+        dataLink.remove(paises);
     }
 
     @Test
     public void testUpdatePais() throws Exception {
         System.out.println("testUpdatePais");
+        
         if (error != null) {
             System.out.println(error);
             return;
         }
+        //Region
+        Region region;
+        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Update
         Pais pais = new Pais();
         pais.setCodigo("119");
@@ -223,11 +276,20 @@ public class PaisTest extends TestClass {
         pais.setIdempresa(Long.parseLong("41"));
         pais.setLongitud(BigDecimal.ONE);
         pais.setNombre("Argentina");
-        dataLink.persist(pais);
-        
-        pais.setNombre("Brasil");
+        pais.setMoneda(moneda);
+        pais.setRegion(region);
+        pais.setAction(IDataRow.INSERT);
         dataLink.update(pais);
-        String expPais = "Brasil";
+        //Merge
+        pais = dataLink.findByQuery("select o from Pais o where codigo = '119'", null);
+        pais.setNombre("Brasil");
+        pais.setAction(IDataRow.UPDATE);
+        dataLink.update(pais);
+        
+        //Remove
+        pais.setAction(IDataRow.DELETE);
+        dataLink.update(pais);
+        
         IDataResult dataResult = dataLink.update(pais);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
@@ -241,6 +303,12 @@ public class PaisTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Region
+        Region region;
+        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        //Moneda
+        Moneda moneda;
+        moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         List<Pais> paises = new ArrayList();
         //Persist
         for (int i = 0; i < 5; i++) {
@@ -251,25 +319,31 @@ public class PaisTest extends TestClass {
             pais.setLatitud(BigDecimal.TEN);
             pais.setLongitud(BigDecimal.ONE);
             pais.setNoedit(Boolean.FALSE);
-            pais.setNombre("Paraguay");
+            pais.setNombre("Argentina");
+            pais.setMoneda(moneda);
+            pais.setRegion(region);
+            pais.setAction(IDataRow.INSERT);
             paises.add(pais);
         }
-        //Update
         dataLink.update(paises);
-        Pais pais = new Pais();
-        pais.setNombre("Argentina");
-        paises.add(pais);
+        
+        //Merge
+        paises = dataLink.findByQuery("select o from Pais o where nombre = 'Argentina'", null);
+        for (int i = 0; i < 5; i++) {
+            paises.get(i).setNombre("Mexicanos");
+            paises.get(i).setAction(IDataRow.UPDATE);
+        }
         dataLink.update(paises);
-        pais.setCodigo("115");
-        paises.add(pais);
+        
+        for (int i = 0; i < 5; i++) {
+            paises.get(i).setAction(IDataRow.DELETE);
+        }
         dataLink.update(paises);
-        paises = dataLink.findListByQuery("select o from Pais o where codigo='115'", null);
         IDataResult dataResult = dataLink.update(paises);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        //assertTrue(paises.isEmpty());
-        dataLink.remove(paises);
     }
+    
     @Test
     public void testUpdatePaisDataObject() throws NamingException, SessionError, Exception {
         System.out.println("testUpdatePaisDataObject");
