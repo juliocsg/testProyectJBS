@@ -86,6 +86,9 @@ public class RegionTest extends TestClass{
         region.setNombre("Argentina");
         region.setFechamodificacion(new Date());
         dataLink.persist(region);   
+        region = dataLink.findByQuery("select o from Region o where codigo='ARG'", null);
+        region.setNombre("Mexico");
+        region.setCodigo("MXN");
         IDataResult dataResult = dataLink.merge(region);
         Region regionResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -113,15 +116,21 @@ public class RegionTest extends TestClass{
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
+        dataLink.persist(regiones);
+        regiones = dataLink.findListByQuery("select o from Region o where nombre='Argentina'", null);
+        for (int i = 0; i < 5; i++) {
+            regiones.get(i).setNombre("Mexicanos");
+        }
         dataLink.merge(regiones);
         IDataResult dataResult = dataLink.merge(regiones);
+        List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
        /*
         for (int i = 0; i < 5; i++) {
             assertTrue(regiones.get(i).getCodigo().trim().equals(v_codigo[i]));
-        }
-        dataLink.remove(regiones);*/
+        }*/
+        dataLink.remove(regionesResult);
     }
     @Test
     public void testRemoveRegion() throws Exception {
@@ -135,9 +144,10 @@ public class RegionTest extends TestClass{
         region.setFechamodificacion(new Date());
         dataLink.persist(region); 
         IDataResult dataResult = dataLink.persist(region);
+        Region regionResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(region);
+        dataLink.remove(regionResult);
         /*List<Object> queryRegion = dataLink.findByNativeQuery("select * from {schema}.region where codigo='MXN'", null);
         assertTrue(queryRegion.isEmpty());*/
     } 
@@ -161,9 +171,10 @@ public class RegionTest extends TestClass{
         }
         dataLink.persist(regiones);
         IDataResult dataResult = dataLink.persist(regiones);
+        List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        dataLink.remove(regiones);
+        dataLink.remove(regionesResult);
         /*regiones = dataLink.findListByQuery("select o from Region o where codigo='MXN'", null);
         assertTrue(regiones.isEmpty());*/
     }
@@ -173,21 +184,30 @@ public class RegionTest extends TestClass{
         if (error != null){
             System.out.println(error);
         }
+        //Persist
         Region region = new Region();
         region.setCodigo("ARG");
         region.setNombre("Argentina");
         region.setFechamodificacion(new Date());
-        dataLink.persist(region);
+        region.setAction(IDataRow.INSERT);
+        dataLink.update(region);
+        
+        //Merge
+        region = dataLink.findByQuery("select o from Region o where codigo='ARG'", null);
         region.setNombre("Argentina");
+        region.setAction(IDataRow.UPDATE);
         dataLink.update(region);
-        region.setCodigo("MXN");
+        
+        //Delete
+        region.setAction(IDataRow.DELETE);
         dataLink.update(region);
-        String expCodigo = "MXN";
+        
         IDataResult dataResult = dataLink.update(region);
+        Region regionResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        /*assertEquals(expCodigo, region.getCodigo());
-        dataLink.remove(region);*/
+        /*assertEquals(expCodigo, region.getCodigo());*/
+        dataLink.remove(regionResult);
     } 
     
     @Test
@@ -198,7 +218,7 @@ public class RegionTest extends TestClass{
             return;
         }
         String[] v_codigo = {"ARG","RUB", "USD", "EUR", "MXN"};
-        String codigo_aux = "";
+        String codigo_aux;
         List<Region> regiones = new ArrayList();
         for (int i = 0; i < 5; i++) {
             codigo_aux = v_codigo[i];
@@ -206,22 +226,28 @@ public class RegionTest extends TestClass{
             region.setCodigo(codigo_aux);
             region.setNombre("Argentina");
             region.setFechamodificacion(new Date());
+            region.setAction(IDataRow.INSERT);
             regiones.add(region);
         }
         dataLink.update(regiones);
-        Region region = new Region();
-        region.setNombre("Colombia");
-        regiones.add(region);
+        regiones = dataLink.findListByQuery("select o from Region o where codigo='ARG'", null);
+        for (int i = 0; i < 5; i++) {
+            regiones.get(i).setNombre("Mexicano");
+            regiones.get(i).setCodigo("MXN");
+            regiones.get(i).setAction(IDataRow.UPDATE);
+        }
         dataLink.update(regiones);
-        region.setCodigo("MXN");
-        regiones.add(region);
+        for (int i = 0; i < 5; i++) {
+            regiones.get(i).setAction(IDataRow.DELETE);
+        }
         dataLink.update(regiones);
         IDataResult dataResult = dataLink.update(regiones);
+        List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         /*regiones = dataLink.findListByQuery("select o from Region o where codigo='MXN'", null);
         assertTrue(regiones.isEmpty());*/
-        dataLink.remove(regiones);
+        dataLink.remove(regionesResult);
     }
     @Test
     public void testUpdateRegionDataObject() throws NamingException, SessionError, Exception {
