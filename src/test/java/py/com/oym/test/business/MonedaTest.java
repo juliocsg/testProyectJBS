@@ -99,8 +99,6 @@ public class MonedaTest extends TestClass {
         moneda.setNombre("Pesos Arg");
         IDataResult dataResult = dataLink.merge(moneda);
         Moneda monedaResult = dataResult.getRowUpdated();
-        //String nombre = "Guarani";
-        //assertEquals(nombre,monedaResult.getNombre());
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         dataLink.remove(monedaResult);
@@ -234,12 +232,10 @@ public class MonedaTest extends TestClass {
             moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
             moneda.setIdempresa(41L);
-            //moneda.setDecimalpoint(Short.MIN_VALUE);
             moneda.setAction(IDataRow.INSERT);
             monedas.add(moneda);
         }
         dataLink.update(monedas);
-        
         //Merge
         monedas = dataLink.findListByQuery("select o from Moneda o where nombre = 'Dòlares varios'", null);
         for (int i = 0; i < 5; i++) {
@@ -258,7 +254,6 @@ public class MonedaTest extends TestClass {
         assertTrue(dataResult.isSuccessFul());
        
     }   
-    
     @Test
     public void testUpdateMonedaDataObject() throws NamingException, SessionError, Exception {
         System.out.println("testUpdatePaisDataObject");
@@ -294,7 +289,6 @@ public class MonedaTest extends TestClass {
         IDataSet dataSet = new DataSet();
         dataSet.addDataObject("region", region);
         dataSet.addDataObject("pais", pais);
-        //dataSet.addDataObject("moneda", moneda);
         
         boolean result = dataLink.update(dataSet).isSuccessFul();
         System.out.println(result);

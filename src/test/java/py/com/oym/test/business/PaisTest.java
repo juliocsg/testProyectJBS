@@ -21,11 +21,14 @@ import org.javabeanstack.model.tables.Pais;
 import org.javabeanstack.model.tables.Region;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 
 /**
  *
  * @author Jean
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PaisTest extends TestClass {
 
     public PaisTest() {
@@ -127,8 +130,6 @@ public class PaisTest extends TestClass {
         pais.setNombre("Perú");
         IDataResult dataResult = dataLink.merge(pais);
         Pais paisResult = dataResult.getRowUpdated();
-        //String nombre = "Argentina";
-        //assertEquals(nombre, paisResultado.getNombre());
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         dataLink.remove(paisResult);
@@ -167,9 +168,6 @@ public class PaisTest extends TestClass {
         }
         //Merge
         dataLink.merge(paises);
-        /*for (int i = 0; i < 5; i++) {
-            assertTrue(paises.get(i).getCodigo().equals("11"+(i+5)));
-        }*/
         IDataResult dataResult = dataLink.merge(paises);
         List<IDataRow> paisesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -206,10 +204,6 @@ public class PaisTest extends TestClass {
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         dataLink.remove(paisResult);
-        /*
-        dataLink.remove(pais);
-        List<Object> queryPais = dataLink.findByNativeQuery("select * from {schema}.pais where nombre = 'Argentina'", null);
-        assertTrue(queryPais.isEmpty());*/
     }
     @Test
     public void testRemoveListPais() throws Exception {
@@ -239,7 +233,6 @@ public class PaisTest extends TestClass {
             paises.add(pais);
         }
         //Remove
-        dataLink.persist(paises);
         IDataResult dataResult = dataLink.persist(paises);
         paises = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -286,8 +279,6 @@ public class PaisTest extends TestClass {
         IDataResult dataResult = dataLink.update(pais);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        /*assertEquals(expPais, pais.getNombre());
-        dataLink.remove(pais);*/
     }
     @Test
     public void testUpdateListPais() throws Exception {
@@ -396,5 +387,6 @@ public class PaisTest extends TestClass {
             }
             assertTrue(resultado);            
         }
+        
     }
 }
