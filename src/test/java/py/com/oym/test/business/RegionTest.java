@@ -42,9 +42,6 @@ public class RegionTest extends TestClass{
         region.setFechamodificacion(new Date());
         IDataResult dataResult = dataLink.persist(region); 
         Region regionResult = dataResult.getRowUpdated();
-        /*Region regionResultado = dataResult.getRowUpdated();
-        String nombre = "Argentina";
-        assertEquals(nombre,regionResultado.getNombre());*/
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         dataLink.remove(regionResult);
@@ -68,7 +65,6 @@ public class RegionTest extends TestClass{
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
-        dataLink.persist(regiones);
         IDataResult dataResult = dataLink.persist(regiones);
         List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -124,7 +120,6 @@ public class RegionTest extends TestClass{
         for (int i = 0; i < 5; i++) {
             regiones.get(i).setNombre("Mexicanos");
         }
-        dataLink.merge(regiones);
         IDataResult dataResult = dataLink.merge(regiones);
         List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -174,7 +169,6 @@ public class RegionTest extends TestClass{
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
-        dataLink.persist(regiones);
         IDataResult dataResult = dataLink.persist(regiones);
         List<IDataRow> regionesResult = dataResult.getRowsUpdated();
         System.out.println(dataResult.getErrorMsg());

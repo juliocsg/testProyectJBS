@@ -7,7 +7,6 @@ package py.com.oym.test.business;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
 import org.javabeanstack.data.IDataResult;
@@ -48,11 +47,11 @@ public class PaisTest extends TestClass {
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Region
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         //Pais
         Pais pais = new Pais();
         pais.setCodigo("119");
-        pais.setFechamodificacion(new Date());
+        
         pais.setLatitud(BigDecimal.TEN);
         pais.setLongitud(BigDecimal.ONE);
         pais.setNoedit(Boolean.FALSE);
@@ -79,13 +78,12 @@ public class PaisTest extends TestClass {
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Region
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         List<Pais> paises = new ArrayList();
         //Persist
         for (int i = 0; i < 5; i++) {
             Pais pais = new Pais();
             pais.setCodigo("11"+(i+5));
-            pais.setFechamodificacion(new Date());
             pais.setLatitud(BigDecimal.TEN);
             pais.setIdempresa(41L);
             pais.setLongitud(BigDecimal.ONE);
@@ -114,10 +112,9 @@ public class PaisTest extends TestClass {
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Merge
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         Pais pais = new Pais();
         pais.setCodigo("119");
-        pais.setFechamodificacion(new Date());
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setIdempresa(41L);
@@ -145,7 +142,7 @@ public class PaisTest extends TestClass {
             return;
         }
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         //Moneda
         Moneda moneda;
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
@@ -154,7 +151,6 @@ public class PaisTest extends TestClass {
         for (int i = 0; i < 5; i++) {
             Pais pais = new Pais();
             pais.setCodigo("11"+(i+5));
-            pais.setFechamodificacion(new Date());
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
             pais.setIdempresa(41L);
@@ -190,14 +186,13 @@ public class PaisTest extends TestClass {
         }
         //Region
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         //Moneda
         Moneda moneda;
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Remove
         Pais pais = new Pais();
         pais.setCodigo("119");
-        pais.setFechamodificacion(new Date());
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setIdempresa(41L);
@@ -225,7 +220,7 @@ public class PaisTest extends TestClass {
         }
         //Region
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         //Moneda
         Moneda moneda;
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
@@ -233,8 +228,7 @@ public class PaisTest extends TestClass {
         //Persist
         for (int i = 0; i < 5; i++) {
             Pais pais = new Pais();
-            pais.setCodigo("115");
-            pais.setFechamodificacion(new Date());
+            pais.setCodigo("11"+(i+5));
             pais.setLongitud(BigDecimal.ONE);
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
@@ -263,14 +257,13 @@ public class PaisTest extends TestClass {
         }
         //Region
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         //Moneda
         Moneda moneda;
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
         //Update
         Pais pais = new Pais();
         pais.setCodigo("119");
-        pais.setFechamodificacion(new Date());
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
         pais.setIdempresa(41L);
@@ -305,7 +298,7 @@ public class PaisTest extends TestClass {
         }
         //Region
         Region region;
-        region = dataLink.findByQuery("select o from Region o where idregion = 228", null);
+        region = dataLink.findByQuery("select o from Region o where idregion = 110", null);
         //Moneda
         Moneda moneda;
         moneda = dataLink.findByQuery("select o from Moneda o where idmoneda = 248", null);
@@ -313,8 +306,7 @@ public class PaisTest extends TestClass {
         //Persist
         for (int i = 0; i < 5; i++) {
             Pais pais = new Pais();
-            pais.setCodigo("115");
-            pais.setFechamodificacion(new Date());
+            pais.setCodigo("11"+(i+5));
             pais.setIdempresa(41L);
             pais.setLatitud(BigDecimal.TEN);
             pais.setLongitud(BigDecimal.ONE);
@@ -328,7 +320,7 @@ public class PaisTest extends TestClass {
         dataLink.update(paises);
         
         //Merge
-        paises = dataLink.findByQuery("select o from Pais o where nombre = 'Argentina'", null);
+        paises = dataLink.findListByQuery("select o from Pais o where nombre = 'Argentina'", null);
         for (int i = 0; i < 5; i++) {
             paises.get(i).setNombre("Mexicanos");
             paises.get(i).setAction(IDataRow.UPDATE);
@@ -363,7 +355,7 @@ public class PaisTest extends TestClass {
         IDataObject pais = new DataObject(Pais.class, null, dataLink, null);
         pais.open();
         pais.insertRow();
-        pais.setField("codigo", "119");
+        pais.setField("codigo", "124");
         pais.setField("nombre", "Paraguay");
         pais.setField("region", region.getRow());
 
@@ -387,7 +379,7 @@ public class PaisTest extends TestClass {
         //Pais
         IDataObject pais = new DataObject(Pais.class, null, dataLink, null);
         pais.open();
-        if (pais.find("codigo", "119")) {
+        if (pais.find("codigo", "124")) {
             pais.deleteRow();
             resultado = pais.update(false);
             assertTrue(resultado);

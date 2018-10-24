@@ -127,7 +127,6 @@ public class MonedaTest extends TestClass {
             monedas.add(moneda);
         } 
         dataLink.persist(monedas);
-        //IDataResult dataResult = dataLink.persist(monedas);
         monedas = dataLink.findListByQuery("select o from Moneda o where nombre = 'Libra'", null);
         for (int i = 0; i < 5; i++){
            monedas.get(i).setNombre("Mexicanos"); 
@@ -137,7 +136,7 @@ public class MonedaTest extends TestClass {
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
         assertTrue(monedasResult.get(0).getErrors().isEmpty());
-        //dataLink.remove(monedasResult);
+        dataLink.remove(monedasResult);
     }
    
     @Test
@@ -187,7 +186,6 @@ public class MonedaTest extends TestClass {
         assertTrue(dataResult.isSuccessFul());
         dataLink.remove(monedasResult);
     }   
-   
     @Test
     public void testUpdateMoneda() throws Exception 
     {
@@ -217,9 +215,7 @@ public class MonedaTest extends TestClass {
         IDataResult dataResult = dataLink.update(moneda);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        
     }
-    
     @Test
     public void testUpdateListMoneda() throws Exception{
         System.out.println("testUpdateListMoneda");
@@ -257,19 +253,10 @@ public class MonedaTest extends TestClass {
             monedas.get(i).setAction(IDataRow.DELETE);
         }
         dataLink.update(monedas);
-        /*Moneda moneda = new Moneda();
-        moneda.setNombre("Dolar");
-        monedas.add(moneda);
-        dataLink.update(monedas);
-        moneda.setCodigo("GBP");
-        monedas.add(moneda);
-        dataLink.update(monedas);*/
         IDataResult dataResult = dataLink.update(monedas);
         System.out.println(dataResult.getErrorMsg());
         assertTrue(dataResult.isSuccessFul());
-        /*monedas = dataLink.findListByQuery("select o from Moneda o where nombre='Dolar'", null);
-        assertTrue(monedas.isEmpty());
-        dataLink.remove(monedas);*/
+       
     }   
     
     @Test
