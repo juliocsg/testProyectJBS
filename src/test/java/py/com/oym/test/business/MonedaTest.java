@@ -263,7 +263,7 @@ public class MonedaTest extends TestClass {
             return;
         }
         
-        //moneda
+        //Moneda
         IDataObject moneda = new DataObject(Moneda.class, null, dataLink, null);
         moneda.open();
         moneda.insertRow();
@@ -277,7 +277,7 @@ public class MonedaTest extends TestClass {
         region.setField("codigo", "EUR");
         region.setField("nombre", "Europa");
 
-        //pais
+        //Pais
         IDataObject pais = new DataObject(Pais.class, null, dataLink, null);
         pais.open();
         pais.insertRow();
