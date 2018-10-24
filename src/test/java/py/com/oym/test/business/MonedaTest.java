@@ -9,8 +9,6 @@ package py.com.oym.test.business;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javassist.compiler.Parser;
 import javax.naming.NamingException;
 import org.javabeanstack.data.IDataResult;
 import org.javabeanstack.data.IDataRow;
@@ -19,7 +17,6 @@ import org.javabeanstack.data.IGenericDAORemote;
 import org.javabeanstack.data.model.DataSet;
 import org.javabeanstack.datactrl.DataObject;
 import org.javabeanstack.datactrl.IDataObject;
-import org.javabeanstack.error.IErrorReg;
 import org.javabeanstack.exceptions.SessionError;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -52,7 +49,7 @@ public class MonedaTest extends TestClass {
         moneda.setCodigo("ARG");
         moneda.setNombre("pesos argentinos");
         moneda.setCambio(BigDecimal.ONE);
-        moneda.setIdempresa(Long.parseLong("41"));
+        moneda.setIdempresa(41L);
         IDataResult dataResult = dataLink.persist(moneda);
         Moneda monedaResult = dataResult.getRowUpdated();
         System.out.println(dataResult.getErrorMsg());
@@ -75,7 +72,7 @@ public class MonedaTest extends TestClass {
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
-            moneda.setIdempresa(Long.parseLong("41"));
+            moneda.setIdempresa(41L);
             monedas.add(moneda);
         }
         IDataResult dataResult = dataLink.persist(monedas);
@@ -96,7 +93,7 @@ public class MonedaTest extends TestClass {
         moneda.setCodigo("ARG");
         moneda.setNombre("Pesos Argentinos");
         moneda.setCambio(BigDecimal.ONE);
-        moneda.setIdempresa(Long.parseLong("41"));
+        moneda.setIdempresa(41L);
         dataLink.persist(moneda);
         moneda = dataLink.findByQuery("select o from Moneda o where codigo = 'ARG'", null);
         moneda.setNombre("Pesos Arg");
@@ -126,7 +123,7 @@ public class MonedaTest extends TestClass {
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Libra");
             moneda.setCambio(BigDecimal.ONE);
-            moneda.setIdempresa(Long.parseLong("41"));
+            moneda.setIdempresa(41L);
             monedas.add(moneda);
         } 
         dataLink.persist(monedas);
@@ -155,7 +152,7 @@ public class MonedaTest extends TestClass {
         moneda.setCodigo("PYG");
         moneda.setNombre("Dòlares varios");
         moneda.setCambio(BigDecimal.ONE);
-        moneda.setIdempresa(Long.parseLong("41"));
+        moneda.setIdempresa(41L);
         //moneda.setDecimalpoint(Short.MIN_VALUE);
         
         IDataResult dataResult = dataLink.persist(moneda);
@@ -180,7 +177,7 @@ public class MonedaTest extends TestClass {
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
-            moneda.setIdempresa(Long.parseLong("41"));
+            moneda.setIdempresa(41L);
             monedas.add(moneda);
         }
         //Remove
@@ -204,7 +201,7 @@ public class MonedaTest extends TestClass {
         moneda.setCodigo("PYG");
         moneda.setNombre("Dòlares varios");
         moneda.setCambio(BigDecimal.ONE);
-        moneda.setIdempresa(Long.parseLong("41"));
+        moneda.setIdempresa(41L);
         moneda.setAction(IDataRow.INSERT);
         dataLink.update(moneda);
         
@@ -240,7 +237,7 @@ public class MonedaTest extends TestClass {
             moneda.setCodigo(codigo_aux);
             moneda.setNombre("Dòlares varios");
             moneda.setCambio(BigDecimal.ONE);
-            moneda.setIdempresa(Long.parseLong("41"));
+            moneda.setIdempresa(41L);
             //moneda.setDecimalpoint(Short.MIN_VALUE);
             moneda.setAction(IDataRow.INSERT);
             monedas.add(moneda);

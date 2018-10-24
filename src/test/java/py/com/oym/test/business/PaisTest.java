@@ -57,7 +57,7 @@ public class PaisTest extends TestClass {
         pais.setLongitud(BigDecimal.ONE);
         pais.setNoedit(Boolean.FALSE);
         pais.setNombre("Argentina");
-        pais.setIdempresa(Long.parseLong("41"));
+        pais.setIdempresa(41L);
         pais.setRegion(region);
         pais.setMoneda(moneda);
         IDataResult dataResult = dataLink.persist(pais);
@@ -87,7 +87,7 @@ public class PaisTest extends TestClass {
             pais.setCodigo("11"+(i+5));
             pais.setFechamodificacion(new Date());
             pais.setLatitud(BigDecimal.TEN);
-            pais.setIdempresa(Long.parseLong("41"));
+            pais.setIdempresa(41L);
             pais.setLongitud(BigDecimal.ONE);
             pais.setNoedit(Boolean.FALSE);
             pais.setNombre("Paraguay");
@@ -120,7 +120,7 @@ public class PaisTest extends TestClass {
         pais.setFechamodificacion(new Date());
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
-        pais.setIdempresa(Long.parseLong("41"));
+        pais.setIdempresa(41L);
         pais.setLongitud(BigDecimal.ONE);
         pais.setNombre("Argentina");
         pais.setRegion(region);
@@ -157,7 +157,7 @@ public class PaisTest extends TestClass {
             pais.setFechamodificacion(new Date());
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
-            pais.setIdempresa(Long.parseLong("41"));
+            pais.setIdempresa(41L);
             pais.setLongitud(BigDecimal.ONE);
             pais.setNombre("Argentina");
             pais.setMoneda(moneda);
@@ -200,7 +200,7 @@ public class PaisTest extends TestClass {
         pais.setFechamodificacion(new Date());
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
-        pais.setIdempresa(Long.parseLong("41"));
+        pais.setIdempresa(41L);
         pais.setLongitud(BigDecimal.ONE);
         pais.setNombre("Argentina");
         pais.setMoneda(moneda);
@@ -238,7 +238,7 @@ public class PaisTest extends TestClass {
             pais.setLongitud(BigDecimal.ONE);
             pais.setLatitud(BigDecimal.TEN);
             pais.setNoedit(Boolean.FALSE);
-            pais.setIdempresa(Long.parseLong("41"));
+            pais.setIdempresa(41L);
             pais.setNombre("Paraguay");
             pais.setMoneda(moneda);
             pais.setRegion(region);
@@ -273,7 +273,7 @@ public class PaisTest extends TestClass {
         pais.setFechamodificacion(new Date());
         pais.setLatitud(BigDecimal.TEN);
         pais.setNoedit(Boolean.FALSE);
-        pais.setIdempresa(Long.parseLong("41"));
+        pais.setIdempresa(41L);
         pais.setLongitud(BigDecimal.ONE);
         pais.setNombre("Argentina");
         pais.setMoneda(moneda);
@@ -315,7 +315,7 @@ public class PaisTest extends TestClass {
             Pais pais = new Pais();
             pais.setCodigo("115");
             pais.setFechamodificacion(new Date());
-            pais.setIdempresa(Long.parseLong("41"));
+            pais.setIdempresa(41L);
             pais.setLatitud(BigDecimal.TEN);
             pais.setLongitud(BigDecimal.ONE);
             pais.setNoedit(Boolean.FALSE);

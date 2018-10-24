@@ -38,7 +38,7 @@ public class RegionTest extends TestClass{
         Region region = new Region();
         region.setCodigo("ARG");
         region.setNombre("Argentina");
-        region.setIdempresa(Long.parseLong("41"));
+        region.setIdempresa(41L);
         region.setFechamodificacion(new Date());
         IDataResult dataResult = dataLink.persist(region); 
         Region regionResult = dataResult.getRowUpdated();
@@ -64,6 +64,7 @@ public class RegionTest extends TestClass{
             Region region = new Region();
             region.setCodigo(codigo_aux);
             region.setNombre("Argentina");
+            region.setIdempresa(41L);
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
@@ -84,6 +85,7 @@ public class RegionTest extends TestClass{
         Region region = new Region();
         region.setCodigo("ARG");
         region.setNombre("Argentina");
+        region.setIdempresa(41L);
         region.setFechamodificacion(new Date());
         dataLink.persist(region);   
         region = dataLink.findByQuery("select o from Region o where codigo='ARG'", null);
@@ -113,6 +115,7 @@ public class RegionTest extends TestClass{
             Region region = new Region();
             region.setCodigo(codigo_aux);
             region.setNombre("Argentina");
+            region.setIdempresa(41L);
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
@@ -141,6 +144,7 @@ public class RegionTest extends TestClass{
         Region region = new Region();
         region.setCodigo("ARG");
         region.setNombre("Argentina");
+        region.setIdempresa(41L);
         region.setFechamodificacion(new Date());
         dataLink.persist(region); 
         IDataResult dataResult = dataLink.persist(region);
@@ -166,6 +170,7 @@ public class RegionTest extends TestClass{
             Region region = new Region();
             region.setCodigo(codigo_aux);
             region.setNombre("Argentina");
+            region.setIdempresa(41L);
             region.setFechamodificacion(new Date());
             regiones.add(region);
         }
@@ -188,6 +193,7 @@ public class RegionTest extends TestClass{
         Region region = new Region();
         region.setCodigo("ARG");
         region.setNombre("Argentina");
+        region.setIdempresa(41L);
         region.setFechamodificacion(new Date());
         region.setAction(IDataRow.INSERT);
         dataLink.update(region);
@@ -225,6 +231,7 @@ public class RegionTest extends TestClass{
             Region region = new Region();
             region.setCodigo(codigo_aux);
             region.setNombre("Argentina");
+            region.setIdempresa(41L);
             region.setFechamodificacion(new Date());
             region.setAction(IDataRow.INSERT);
             regiones.add(region);
