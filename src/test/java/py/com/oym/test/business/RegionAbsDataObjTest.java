@@ -7,7 +7,6 @@ package py.com.oym.test.business;
 
 import javax.naming.NamingException;
 import org.javabeanstack.data.IDataSet;
-import org.javabeanstack.data.IGenericDAORemote;
 import org.javabeanstack.data.model.DataSet;
 import org.javabeanstack.datactrl.DataObject;
 import org.javabeanstack.datactrl.IDataObject;
@@ -16,52 +15,57 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.javabeanstack.model.tables.Pais;
 import org.javabeanstack.model.tables.Region;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import static py.com.oym.test.business.TestClass.dataLink;
 
 /**
  *
  * @author oym-dev07
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RegionAbsDataObjTest extends TestClass {
 
-    private static IGenericDAORemote dao;
-
     @Test
-    public void test1AddDataRegion() throws NamingException, SessionError, Exception 
-    {
+    public void test1AddDataRegion() throws NamingException, SessionError, Exception {
         System.out.println("test1AddDataRegion");
         if (error != null) {
             System.out.println(error);
-            return; 
+            return;
         }
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.insertRow();
-        region.setField("codigo", "PCF");
-        region.setField("nombre", "Pacífico");
-        DataSet dataSet = new DataSet();
-        dataSet.addDataObject("region", region);
-        boolean resultado = dataLink.update(dataSet).isSuccessFul();
-        assertTrue(resultado);
+        if (!region.find("codigo", "PCF")) {
+            region.insertRow();
+            region.setField("codigo", "PCF");
+            region.setField("nombre", "Pacífico");
+            boolean resultado = region.update(false);
+            assertTrue(resultado);
+        } else {
+            System.out.println("Ya existe en la base de datos");
+        }
     }
+
     @Test
-    public void test2DeleteDataRegion() throws NamingException, SessionError, Exception{
-        if (error != null){
+    public void test2DeleteDataRegion() throws NamingException, SessionError, Exception {
+        if (error != null) {
             System.out.println("test2DeleteDataRegion");
             return;
         }
-        boolean resultadoado;
+        boolean resultado;
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.find("codigo", "PCF");
-        region.deleteRow();
-        resultadoado = region.update(false);
-        assertTrue(resultadoado);
-        if (!resultadoado) {
-            System.out.println(region.getErrorMsg(true));
+        if (region.find("codigo", "PCF")) {
+            region.deleteRow();
+            resultado = region.update(false);
+            assertTrue(resultado);
+            if (!resultado) {
+                System.out.println(region.getErrorMsg(true));
+            }
         }
     }
+
     @Test
     public void test3AddDeleteDataRegionPais() throws NamingException, SessionError, Exception {
         System.out.println("test3AddDeleteDataRegionPais");
@@ -73,37 +77,47 @@ public class RegionAbsDataObjTest extends TestClass {
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.insertRow();
-        region.setField("codigo", "PCF");
-        region.setField("nombre", "Pacífico");
-
+        if (!region.find("codigo", "PCF")) {
+            region.insertRow();
+            region.setField("codigo", "PCF");
+            region.setField("nombre", "Pacífico");
+        }
         //Pais
         IDataObject pais = new DataObject(Pais.class, null, dataLink, null);
         pais.open();
-        pais.insertRow();
-        pais.setField("codigo", "124");
-        pais.setField("nombre", "Perú");
-        pais.setField("region", region.getRow());
-
+        if (!pais.find("codigo", "124")) {
+            pais.insertRow();
+            pais.setField("codigo", "124");
+            pais.setField("nombre", "Perú");
+            pais.setField("region", region.getRow());
+        }
         IDataSet dataSet = new DataSet();
         dataSet.addDataObject("region", region);
         dataSet.addDataObject("pais", pais);
-        
-        boolean resultado = dataLink.update(dataSet).isSuccessFul();
-        System.out.println(resultado);
-        assertTrue(resultado);
-        
-        pais.find("codigo", "124");
-        pais.deleteRow();
-        resultado = pais.update(false);
-        if (!resultado) {
-            System.out.println(pais.getErrorMsg(true));
+
+        boolean resultadoRegion = region.update(dataSet);
+        boolean resultadoPais = pais.update(dataSet);
+
+        System.out.println(resultadoRegion);
+        System.out.println(resultadoPais);
+
+        assertTrue(resultadoRegion);
+        assertTrue(resultadoPais);
+        //Delete
+        boolean resultado;
+        if (pais.find("codigo", "124")) {
+            pais.deleteRow();
+            resultado = pais.update(false);
+            if (!resultado) {
+                System.out.println(pais.getErrorMsg(true));
+            }
         }
-        region.find("codigo", "PCF");
-        region.deleteRow();
-        resultado = region.update(false);
-        if (!resultado) {
-            System.out.println(region.getErrorMsg(true));
+        if (region.find("codigo", "PCF")) {
+            region.deleteRow();
+            resultado = region.update(false);
+            if (!resultado) {
+                System.out.println(region.getErrorMsg(true));
+            }
         }
     }
 }
