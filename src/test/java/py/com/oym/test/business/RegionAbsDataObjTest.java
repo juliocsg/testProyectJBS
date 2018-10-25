@@ -95,7 +95,7 @@ public class RegionAbsDataObjTest extends TestClass {
         dataSet.addDataObject("region", region);
         dataSet.addDataObject("pais", pais);
 
-        boolean resultado = region.update(dataSet);
+        boolean resultado = pais.update(dataSet);
         System.out.println(resultado);
         assertTrue(resultado);
         
