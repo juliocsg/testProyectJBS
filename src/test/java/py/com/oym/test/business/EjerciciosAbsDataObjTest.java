@@ -393,7 +393,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         region.moveFirst();
         region.moveNext();
-        region.movePreviews();
+        region.movePrevious();
         String codigoEsperado = "MER ";
         assertEquals(codigoEsperado, region.getField("codigo"));
     }
@@ -457,5 +457,49 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        region.insertRow();
+        region.setField("codigo", "OCC");
+        region.setField("nombre", "OCCIDENTAL");
+        region.update(false);
+        assertTrue(region.checkData(true));
+    }
+    @Test
+    public void test29CheckDataRowRegion() throws NamingException, SessionError, Exception {
+        System.out.println("test29CheckDataRowRegion");
+        if (error != null) {
+            System.out.println(error);
+            return;
+        }
+        IDataObject region = new DataObject(Region.class, null, dataLink, null);
+        region.open();
+        region.insertRow();
+        if (!region.find("codigo", "OCC")) {
+             region.setField("codigo", "OCC");
+             region.setField("nombre", "OCCIDENTAL");
+             assertNotNull(region.checkDataRow());
+        }
+    }
+    @Test
+    public void test30RevertRegion() throws NamingException, SessionError, Exception {
+        System.out.println("test30RevertRegion");
+        if (error != null) {
+            System.out.println(error);
+            return;
+        }
+        IDataObject region = new DataObject(Region.class, null, dataLink, null);
+        region.open();
+        region.insertRow();
+        region.setField("codigo", "PCF");
+        region.setField("nombre", "PACÍFICO");
+        region.revert();
+        region.setField("codigo", "OCC");
+        region.setField("nombre", "OCCIDENTAL");
+        region.update(false);
+        String nombreEsperado = "OCCIDENTAL";
+        assertEquals(nombreEsperado, region.getField("nombre"));
+        if (region.find("codigo", "OCC")) {
+            region.deleteRow();
+            region.update(false);
+        }
     }
 }
