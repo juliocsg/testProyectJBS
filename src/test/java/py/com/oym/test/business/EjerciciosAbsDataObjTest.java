@@ -5,9 +5,11 @@
  */
 package py.com.oym.test.business;
 
+import java.util.Map;
 import javax.naming.NamingException;
 import org.javabeanstack.datactrl.DataObject;
 import org.javabeanstack.datactrl.IDataObject;
+import org.javabeanstack.error.IErrorReg;
 import org.javabeanstack.exceptions.SessionError;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -464,11 +466,17 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.insertRow();
-        region.setField("codigo", "OCC");
-        region.setField("nombre", "OCCIDENTAL");
-        region.update(false);
-        assertTrue(region.checkData(true));
+        if (!region.find("codigo", "OCC")) {
+            region.insertRow();
+            region.setField("codigo", "OCC");
+            region.setField("nombre", "OCCIDENTAL");
+            region.update(false);
+            assertTrue(region.checkData(true));
+        }
+        if (region.find("codigo", "OCC")) {
+            region.deleteRow();
+            region.update(false);
+        }
     }
     @Test
     public void test28CheckDataRowRegion() throws NamingException, SessionError, Exception {
@@ -479,11 +487,14 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.insertRow();
         if (!region.find("codigo", "OCC")) {
-             region.setField("codigo", "OCC");
-             region.setField("nombre", "OCCIDENTAL");
-             assertNotNull(region.checkDataRow());
+            Map<String, IErrorReg> resultadoEsp = null;
+            region.insertRow();
+            region.setField("codigo", "OCC");
+            region.setField("nombre", "OCCIDENTAL");
+            Map<String, IErrorReg> resultado = region.checkDataRow();
+            //assertNotNull(region.checkDataRow());
+            assertEquals(resultadoEsp, resultado);
         }
     }
     @Test
@@ -495,15 +506,20 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.insertRow();
-        region.setField("codigo", "PCF");
-        region.setField("nombre", "PACÍFICO");
-        region.revert();
-        region.setField("codigo", "OCC");
-        region.setField("nombre", "OCCIDENTAL");
-        region.update(false);
-        String nombreEsperado = "OCCIDENTAL";
-        assertEquals(nombreEsperado, region.getField("nombre"));
+        if (!region.find("codigo", "PCF")) {
+            region.insertRow();
+            region.setField("codigo", "PCF");
+            region.setField("nombre", "PACÍFICO");
+            region.revert();
+            if (!region.find("codigo", "OCC")) {
+                region.insertRow();
+                region.setField("codigo", "OCC");
+                region.setField("nombre", "OCCIDENTAL");
+                region.update(false);
+                String nombreEsperado = "OCCIDENTAL";
+                assertEquals(nombreEsperado, region.getField("nombre"));
+            }
+        }
         if (region.find("codigo", "OCC")) {
             region.deleteRow();
             region.update(false);
