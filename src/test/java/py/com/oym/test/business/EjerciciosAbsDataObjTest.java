@@ -34,11 +34,18 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.setFilter("codigo = 'GS'");
-        String filter = region.getFilter();
-        region.requery();
-        System.out.println(filter);
-        assertNotNull(filter);
+        if (region.isFieldExist("codigo")) {
+            region.setFilter("codigo = 'GS'");
+            String filter = region.getFilter();
+            region.requery();
+            System.out.println(filter);
+            assertNotNull(filter);
+        }
+        else
+        {
+            System.out.println("No existe la columna");
+        }
+        
     }
 
     @Test
@@ -51,10 +58,16 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.setFilter("codigo like 'M%'");
-        region.requery();
-        System.out.println(region.getDataRows());
-        assertNotNull(region.getDataRows());
+        if (region.isFieldExist("codigo")) {
+            region.setFilter("codigo like 'M%'");
+            region.requery();
+            System.out.println(region.getDataRows());
+            assertNotNull(region.getDataRows());
+        }
+        else
+        {
+            System.out.println("No existe la columna");
+        }
     }
 
     @Test
@@ -67,10 +80,16 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.setOrder("codigo asc");
-        String order = region.getOrder();
-        System.out.println(order);
-        assertNotNull(order);
+        if (region.isFieldExist("codigo")) {
+            region.setOrder("codigo asc");
+            String order = region.getOrder();
+            System.out.println(order);
+            assertNotNull(order);
+        }
+        else
+        {
+            System.out.println("No existe la columna");
+        }
     }
 
     @Test
@@ -148,35 +167,23 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        region.setOrder("nombre asc");
-        region.setFilter("idregion between 108 and 110");
-        region.requery();
-        for (int i = 0; i < region.getRowCount(); i++) {
-            System.out.println(region.getDataRows().get(i));
+        if (region.isFieldExist("nombre") && region.isFieldExist("idregion")){
+            region.setOrder("nombre asc");
+            region.setFilter("idregion between 108 and 110");
+            region.requery();
+            for (int i = 0; i < region.getRowCount(); i++) {
+                System.out.println(region.getDataRows().get(i));
+            }
+            assertNotNull(region.getDataRows());
         }
-        assertNotNull(region.getDataRows());
+        else
+        {
+            System.out.println("No existe la columna");
+        }
     }
 
     @Test
-    public void test9RequeryRegion() throws NamingException, SessionError, Exception {
-        System.out.println("test8RequeryRegion");
-        if (error != null) {
-            System.out.println(error);
-            return;
-        }
-        IDataObject region = new DataObject(Region.class, null, dataLink, null);
-        region.open();
-        region.setOrder("nombre asc");
-        region.setFilter("idregion between 108 and 110");
-        region.requery();
-        for (int i = 0; i < region.getRowCount(); i++) {
-            System.out.println(region.getDataRows().get(i));
-        }
-        assertNotNull(region.getDataRows());
-    }
-
-    @Test
-    public void test10CloseRegion() throws NamingException, SessionError, Exception {
+    public void test9CloseRegion() throws NamingException, SessionError, Exception {
         System.out.println("test10CloseRegion");
         if (error != null) {
             System.out.println(error);
@@ -202,7 +209,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test11IsOpenRegion() throws NamingException, SessionError, Exception {
+    public void test10IsOpenRegion() throws NamingException, SessionError, Exception {
         System.out.println("test11IsOpenRegion");
         if (error != null) {
             System.out.println(error);
@@ -219,7 +226,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test12IsForeignKeyPais() throws NamingException, SessionError, Exception {
+    public void test11IsForeignKeyPais() throws NamingException, SessionError, Exception {
         System.out.println("test12IsForeignKeyPais");
         if (error != null) {
             System.out.println(error);
@@ -231,7 +238,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test13IsFieldExistRegion() throws NamingException, SessionError, Exception {
+    public void test12IsFieldExistRegion() throws NamingException, SessionError, Exception {
         System.out.println("test13IsFieldExistRegion");
         if (error != null) {
             System.out.println(error);
@@ -245,7 +252,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test14GetRowRegion() throws NamingException, SessionError, Exception {
+    public void test13GetRowRegion() throws NamingException, SessionError, Exception {
         System.out.println("test14GetRowRegion");
         if (error != null) {
             System.out.println(error);
@@ -258,7 +265,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test15GetDataRowsPais() throws NamingException, SessionError, Exception {
+    public void test14GetDataRowsPais() throws NamingException, SessionError, Exception {
         System.out.println("test15GetDataRowsPais");
         if (error != null) {
             System.out.println(error);
@@ -276,7 +283,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test16GetRecnoRegion() throws NamingException, SessionError, Exception {
+    public void test15GetRecnoRegion() throws NamingException, SessionError, Exception {
         System.out.println("test16GetRecno");
         if (error != null) {
             System.out.println(error);
@@ -291,7 +298,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test17GetSetFieldRegion() throws NamingException, SessionError, Exception {
+    public void test16GetSetFieldRegion() throws NamingException, SessionError, Exception {
         System.out.println("test16GetRecno");
         if (error != null) {
             System.out.println(error);
@@ -307,7 +314,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test18GetFieldOldRegion() throws NamingException, SessionError, Exception {
+    public void test17GetFieldOldRegion() throws NamingException, SessionError, Exception {
         System.out.println("test18GetFieldOldRegion");
         if (error != null) {
             System.out.println(error);
@@ -326,7 +333,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test19FindNextRegion() throws NamingException, SessionError, Exception {
+    public void test18FindNextRegion() throws NamingException, SessionError, Exception {
         System.out.println("test19FindNextRegion");
         if (error != null) {
             System.out.println(error);
@@ -342,7 +349,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test20GoToRegion() throws NamingException, SessionError, Exception {
+    public void test19GoToRegion() throws NamingException, SessionError, Exception {
         System.out.println("test20GoToRegion");
         if (error != null) {
             System.out.println(error);
@@ -354,7 +361,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertFalse(region.goTo(200));
     }
     @Test
-    public void test21MoveFirstRegion() throws NamingException, SessionError, Exception {
+    public void test20MoveFirstRegion() throws NamingException, SessionError, Exception {
         System.out.println("test21MoveFirstRegion");
         if (error != null) {
             System.out.println(error);
@@ -369,7 +376,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
     }
     @Test
-    public void test22MoveNextRegion() throws NamingException, SessionError, Exception {
+    public void test21MoveNextRegion() throws NamingException, SessionError, Exception {
         System.out.println("test22MoveNextRegion");
         if (error != null) {
             System.out.println(error);
@@ -383,7 +390,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertEquals(codigoEsperado, region.getField("codigo"));
     }
     @Test
-    public void test23MovePreviousRegion() throws NamingException, SessionError, Exception {
+    public void test22MovePreviousRegion() throws NamingException, SessionError, Exception {
         System.out.println("test23MovePreviousRegion");
         if (error != null) {
             System.out.println(error);
@@ -398,7 +405,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertEquals(codigoEsperado, region.getField("codigo"));
     }
     @Test
-    public void test24MoveLastRegion() throws NamingException, SessionError, Exception {
+    public void test23MoveLastRegion() throws NamingException, SessionError, Exception {
         System.out.println("test24MoveLastRegion");
         if (error != null) {
             System.out.println(error);
@@ -411,7 +418,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertEquals(codigoEsperado, region.getField("codigo"));
     }
     @Test
-    public void test25IsEOfRegion() throws NamingException, SessionError, Exception {
+    public void test24IsEOfRegion() throws NamingException, SessionError, Exception {
         System.out.println("test25IsEOfRegion");
         if (error != null) {
             System.out.println(error);
@@ -425,7 +432,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertTrue(region.isEof());
     }
     @Test
-    public void test26GetErrorAppRegion() throws NamingException, SessionError, Exception {
+    public void test25GetErrorAppRegion() throws NamingException, SessionError, Exception {
         System.out.println("test26GetErrorAppRegion");
         if (error != null) {
             System.out.println(error);
@@ -436,7 +443,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertNull(region.getErrorApp());
     }
     @Test
-    public void test27GetErrorMsgsRegion() throws NamingException, SessionError, Exception {
+    public void test26GetErrorMsgsRegion() throws NamingException, SessionError, Exception {
         System.out.println("test27GetErrorMsgsRegion");
         if (error != null) {
             System.out.println(error);
@@ -449,7 +456,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertEquals(resultadoEsperado,resultado);
     }
     @Test
-    public void test28CheckDataRegion() throws NamingException, SessionError, Exception {
+    public void test27CheckDataRegion() throws NamingException, SessionError, Exception {
         System.out.println("test28CheckDataRegion");
         if (error != null) {
             System.out.println(error);
@@ -464,7 +471,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         assertTrue(region.checkData(true));
     }
     @Test
-    public void test29CheckDataRowRegion() throws NamingException, SessionError, Exception {
+    public void test28CheckDataRowRegion() throws NamingException, SessionError, Exception {
         System.out.println("test29CheckDataRowRegion");
         if (error != null) {
             System.out.println(error);
@@ -480,7 +487,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
     }
     @Test
-    public void test30RevertRegion() throws NamingException, SessionError, Exception {
+    public void test29RevertRegion() throws NamingException, SessionError, Exception {
         System.out.println("test30RevertRegion");
         if (error != null) {
             System.out.println(error);
