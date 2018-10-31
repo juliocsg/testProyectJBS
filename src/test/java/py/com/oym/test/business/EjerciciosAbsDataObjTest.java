@@ -143,22 +143,8 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             region.insertRow();
             region.setField("codigo", "PCF");
             region.setField("nombre", "PACÍFICO");
-            region.update(false);
-            if (!region.find("codigo", "PCF")) {
-                region.setReadWrite(true);
-                region.insertRow();
-                region.setField("codigo", "PCF");
-                region.setField("nombre", "PACÍFICO");
-                region.update(false);
-            }
-        }
-        if (region.find("codigo", "PCF")) {
-            region.deleteRow();
-            boolean resultado = region.update(false);
-            assertTrue(resultado);
-            if (!resultado) {
-                System.out.println(region.getErrorMsg(true));
-            }
+            boolean result = region.update(false);
+            assertFalse(result);
         }
     }
 
@@ -175,6 +161,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             region.setOrder("nombre asc");
             region.setFilter("idregion between 108 and 110");
             region.requery();
+            region.moveFirst();
             while (region.isEof() == false) {                
                 System.out.println("Código: "+region.getField("codigo")+" Nombre: "+region.getField("nombre"));
                 region.moveNext();
@@ -226,7 +213,6 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         assertTrue(region.isFieldExist("nombre"));
         assertFalse(region.isFieldExist("nombreregion"));
-        
     }
 
     @Test
@@ -276,7 +262,8 @@ public class EjerciciosAbsDataObjTest extends TestClass {
     }
 
     @Test
-    public void test14GetSetFieldRegion() throws NamingException, SessionError, Exception {
+    public void test14GetSetFieldRegion() throws NamingException, SessionError, Exception 
+    {
         System.out.println("test14GetSetFieldRegion");
         if (error != null) {
             System.out.println(error);
@@ -321,9 +308,9 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        if (region.find("codigo", "MER")) {
+        if (region.find("idempresa", "41")) {
             region.findNext();
-            String codigoResultado = "MER";
+            String codigoResultado = "41";
             assertEquals(codigoResultado,region.getField("codigo"));
         }
     }
@@ -352,8 +339,10 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         if (region.find("codigo", "OTRO")){
             assertTrue(region.moveFirst());
-            String codigoEsperado = "MER ";
-            assertEquals(codigoEsperado,region.getField("codigo"));
+            int numEsperado = 1;
+            assertEquals(numEsperado,region.getRecno());
+            //String codigoEsperado = "MER ";
+            //assertEquals(codigoEsperado,region.getField("codigo"));
         }
     }
     @Test
@@ -367,8 +356,10 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         region.moveFirst();
         region.moveNext();
-        String codigoEsperado = "AS  ";
-        assertEquals(codigoEsperado, region.getField("codigo"));
+        int numEsperado = 2;
+        assertEquals(numEsperado, region.getRecno());
+        /*String codigoEsperado = "AS  ";
+        assertEquals(codigoEsperado, region.getField("codigo"));*/
     }
     @Test
     public void test20MovePreviousRegion() throws NamingException, SessionError, Exception {
@@ -382,8 +373,10 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.moveFirst();
         region.moveNext();
         region.movePrevious();
-        String codigoEsperado = "MER ";
-        assertEquals(codigoEsperado, region.getField("codigo"));
+        int numEsperado = 1;
+        assertEquals(numEsperado,region.getRecno());
+        /*String codigoEsperado = "MER ";
+        assertEquals(codigoEsperado, region.getField("codigo"));^*/
     }
     @Test
     public void test21MoveLastRegion() throws NamingException, SessionError, Exception {
@@ -395,8 +388,10 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
         region.moveLast();
-        String codigoEsperado = "PRG ";
-        assertEquals(codigoEsperado, region.getField("codigo"));
+        region.moveNext();
+        assertTrue(region.isEof()); 
+        /*String codigoEsperado = "PRG ";
+        assertEquals(codigoEsperado, region.getField("codigo"));*/
     }
     @Test
     public void test22IsEOfRegion() throws NamingException, SessionError, Exception {
