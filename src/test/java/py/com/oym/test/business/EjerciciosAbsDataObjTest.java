@@ -5,6 +5,7 @@
  */
 package py.com.oym.test.business;
 
+import java.util.Date;
 import java.util.Map;
 import javax.naming.NamingException;
 import org.javabeanstack.datactrl.DataObject;
@@ -37,6 +38,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
         if (region.isFieldExist("codigo")) {
+            //Realiza el proceso del filtro
             region.setFilter("codigo = 'GS'");
             String filter = region.getFilter();
             region.requery();
@@ -61,6 +63,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
         if (region.isFieldExist("codigo")) {
+             //Realiza el proceso del filtro
             region.setFilter("codigo like 'M%'");
             region.requery();
             System.out.println(region.getDataRows());
@@ -83,6 +86,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
         if (region.isFieldExist("codigo")) {
+            //Realiza el proceso de ordenación de registros
             region.setOrder("codigo asc");
             String order = region.getOrder();
             System.out.println(order);
@@ -104,6 +108,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //Realiza el proceso de ordenación de registros
         region.setOrder("1 desc");
         region.requery();
         for (int i = 0; i < region.getRowCount(); i++) {
@@ -111,7 +116,6 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         assertNotNull(region.getDataRows());
     }
-
     @Test
     public void test5GetSetFirstMaxRowRegion() throws NamingException, SessionError, Exception {
         System.out.println("test5GetSetFirstMaxRowRegion");
@@ -121,7 +125,9 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //Asigna el primer registro
         region.setFirstRow(0);
+        //Asigna el máximo registro
         region.setMaxRows(3);
         region.requery();
         int firstRow = 0, maxRows = 3;
@@ -136,16 +142,25 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             System.out.println(error);
             return;
         }
+        boolean resultado;
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //El ReadWrite impide que pueda insertar registros
         region.setReadWrite(false);
+        
         if (!region.find("codigo", "PCF")) {
             region.insertRow();
             region.setField("codigo", "PCF");
             region.setField("nombre", "PACÍFICO");
-            boolean result = region.update(false);
-            assertFalse(result);
+            //No permite actualizar el registro
+            resultado = region.update(false);
+            assertFalse(resultado);
         }
+        region.moveFirst();
+        region.deleteRow();
+        //No permite eliminar el registro
+        resultado = region.update(false);
+        assertTrue(!resultado);
     }
 
     @Test
@@ -160,6 +175,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         if (region.isFieldExist("nombre") && region.isFieldExist("idregion")){
             region.setOrder("nombre asc");
             region.setFilter("idregion between 108 and 110");
+            //Proceso de realización de la consulta
             region.requery();
             region.moveFirst();
             while (region.isEof() == false) {                
@@ -183,8 +199,10 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //Validar si está abierto
         assertTrue(region.isOpen());
         region.close();
+        //Validar que esté cerrado
         assertFalse(region.isOpen());
     }
 
@@ -197,6 +215,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject pais = new DataObject(Pais.class, null, dataLink, null);
         pais.open();
+        //Control de clave foránea
         assertTrue(pais.isForeingKey("region"));
         assertFalse(pais.isForeingKey("nombre"));
         assertFalse(pais.isForeingKey("colforanea"));
@@ -211,6 +230,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //Pregunta si existe el campo
         assertTrue(region.isFieldExist("nombre"));
         assertFalse(region.isFieldExist("nombreregion"));
     }
@@ -224,6 +244,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //Obtención de registro en la posición actual
         System.out.println(region.getRow());
         assertNotNull(region.getRow());
     }
@@ -243,6 +264,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         for (int i = 0; i < pais.getRowCount(); i++) {
             System.out.println(pais.getDataRows().get(i));
         }
+        //Obtiene todos los registros
         assertNotNull(pais.getDataRows());
     }
 
@@ -257,6 +279,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         if (region.find("codigo", "OTRO")) {
             int numeroFila = 2;
+            //Obtención del número de fila
             assertEquals(numeroFila, region.getRecno());
         }
     }
@@ -308,10 +331,11 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
-        if (region.find("idempresa", "41")) {
+        if (region.find("idempresa", 41L)) {
+            //Busca la siguiente ocurrencia en base a la columna buscada
             region.findNext();
-            String codigoResultado = "41";
-            assertEquals(codigoResultado,region.getField("codigo"));
+            long idEmpresaResultado = 41L;
+            assertEquals(idEmpresaResultado,region.getField("idempresa"));
         }
     }
 
@@ -339,10 +363,8 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         if (region.find("codigo", "OTRO")){
             assertTrue(region.moveFirst());
-            int numEsperado = 1;
+            int numEsperado = 0;
             assertEquals(numEsperado,region.getRecno());
-            //String codigoEsperado = "MER ";
-            //assertEquals(codigoEsperado,region.getField("codigo"));
         }
     }
     @Test
@@ -356,10 +378,8 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.open();
         region.moveFirst();
         region.moveNext();
-        int numEsperado = 2;
+        int numEsperado = 1;
         assertEquals(numEsperado, region.getRecno());
-        /*String codigoEsperado = "AS  ";
-        assertEquals(codigoEsperado, region.getField("codigo"));*/
     }
     @Test
     public void test20MovePreviousRegion() throws NamingException, SessionError, Exception {
@@ -373,10 +393,8 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.moveFirst();
         region.moveNext();
         region.movePrevious();
-        int numEsperado = 1;
+        int numEsperado = 0;
         assertEquals(numEsperado,region.getRecno());
-        /*String codigoEsperado = "MER ";
-        assertEquals(codigoEsperado, region.getField("codigo"));^*/
     }
     @Test
     public void test21MoveLastRegion() throws NamingException, SessionError, Exception {
@@ -390,8 +408,6 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         region.moveLast();
         region.moveNext();
         assertTrue(region.isEof()); 
-        /*String codigoEsperado = "PRG ";
-        assertEquals(codigoEsperado, region.getField("codigo"));*/
     }
     @Test
     public void test22IsEOfRegion() throws NamingException, SessionError, Exception {
@@ -402,6 +418,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
         }
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
         region.open();
+        //Hace el recorrido para que vaya moviendo hasta rompa el ciclo terminando los registros
         while (region.isEof() == false) {            
             region.moveNext();
         }
@@ -414,11 +431,24 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             System.out.println(error);
             return;
         }
+        //Region
         IDataObject region = new DataObject(Region.class, null, dataLink, null);
-        region.open();
-        assertNull(region.getErrorApp());
+        //Error al abrir
+        region.open("sin parametro", "", false, -4);
         assertTrue(region.getErrorApp() != null);
+        assertFalse(region.isOpen());
+        region.open();
+        //Error de filtro
         assertTrue(region.getErrorApp() == null);
+        region.setFilter("noexiste between 20 and 500");
+        region.requery();
+        //Error de asignación de campo
+        assertFalse(region.getErrorApp() == null);
+        assertTrue(!region.setField("campo1", "valor1"));
+        assertTrue(region.getErrorApp() != null);
+        //Error de setfield de tipo de dato
+        assertTrue(!region.setField("codigo", 12345));
+        assertFalse(region.getErrorApp() == null);
     }
     @Test
     public void test24GetErrorMsgsRegion() throws NamingException, SessionError, Exception {
@@ -484,19 +514,23 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             region.insertRow();
             region.setField("codigo", "PCF");
             region.setField("nombre", "PACÍFICO");
-            region.revert();
             if (!region.find("codigo", "OCC")) {
                 region.insertRow();
                 region.setField("codigo", "OCC");
                 region.setField("nombre", "OCCIDENTAL");
-                region.update(false);
-                String nombreEsperado = "OCCIDENTAL";
-                assertEquals(nombreEsperado, region.getField("nombre"));
+                //Verifica cuantos registros tiene para guardar
+                assertTrue(region.getDataRowsChanged().size() == 2);
+                //Revierte el registro actual
+                region.revert();
+                assertTrue(region.getDataRowsChanged().size() == 1);
             }
         }
-        if (region.find("codigo", "OCC")) {
-            region.deleteRow();
-            region.update(false);
-        }
+        region.moveFirst();
+        region.deleteRow();
+        //verifica que uno se inserta y otro que se quiere eliminar
+        assertTrue(region.getDataRowsChanged().size() == 2);
+        //Revierte todos los registros
+        region.revert(true);
+        assertTrue(region.getDataRowsChanged().size() == 0);
     }
 }
