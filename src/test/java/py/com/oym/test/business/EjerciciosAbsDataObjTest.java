@@ -60,7 +60,7 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             return;
         }
         //Region
-        IDataObject region = new DataObject(Region.class, null, dataLink, null);
+        IDataObject<Region> region = new DataObject(Region.class, null, dataLink, null);
         region.open();
         if (region.isFieldExist("codigo")) {
              //Realiza el proceso del filtro
@@ -74,7 +74,6 @@ public class EjerciciosAbsDataObjTest extends TestClass {
             System.out.println("No existe la columna");
         }
     }
-
     @Test
     public void test3GetOrderRegion() throws NamingException, SessionError, Exception {
         System.out.println("test3GetOrderRegion");
